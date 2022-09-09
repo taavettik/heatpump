@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AC Dashboard</title>
+
+  <link rel="stylesheet" href="./index.css" />
+</head>
+<body>
+  <div style="width: 100%" class="row justify-center">
+    <div class="column">
+      <div style="height: 128px"></div>
+
+      <div class="column align-center">
+        <h1>Mitsubishi AC control</h1>
+
+        <div style="height: 16px"></div>
+
+        <div class="row align-center">
+          <form action="/temp/increase" method="post">
+            <button class="button">+</button>
+          </form>
+
+          <div style="width: 8px"></div>
+
+          <div style="width: 120px" class="row align-center">
+            <form action="toggle" method="post" style="height: 24px">
+              {{#if on}}
+                <button class="power-on"></button>
+              {{else}}
+                <button class="power-off"></button>
+              {{/if}}
+            </form>
+
+            <div style="width: 8px"></div>
+
+            <h2>{{temperature}} &#xb0;C</h2>
+          </div>
+
+          <div style="width: 8px"></div>
+
+          <form action="/temp/decrease" method="post">
+            <button class="button">-</button>
+          </form>
+        </div>
+
+        <div style="height: 16px"></div>
+
+        <div class="row justify-between align-center">
+          <form action="/fan/increase" method="post">
+            <button class="button">+</button>
+          </form>
+          
+          <div style="width: 8px"></div>
+
+          <div class="row align-center" style="width: 120px">
+            {{#when fanSpeed "<=" 5}}
+              {{#times fanSpeed}}
+                <img src="./icons/fan.svg" width="24px" height="24px"></img>
+              {{/times}}
+            {{/when}}
+
+            {{#when fanSpeed "==" 6}}
+              <img src="./icons/fan.svg" width="24px" height="24px"></img>
+
+              (AUTO)
+            {{/when}}
+
+            {{#when fanSpeed "==" 7}}
+              <img src="./icons/fan.svg" width="24px" height="24px"></img>
+
+              (SILENT)
+            {{/when}}
+          </div>
+
+          <div style="width: 8px"></div>
+
+          <form action="/fan/decrease" method="post">
+            <button class="button">-</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
