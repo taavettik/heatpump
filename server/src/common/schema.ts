@@ -21,6 +21,7 @@ export interface AcCommand {
   temperature: number,
   fanSpeed: FanSpeed,
   on: boolean;
+  scheduled: boolean;
 }
 
 export interface DbSchema {
@@ -33,5 +34,6 @@ export const defaultSchema = (): DbSchema =>({
     temperature: 20,
     fanSpeed: FanSpeed.FAN_SPEED_1,
     on: true,
+    scheduled: false,
   }
 })

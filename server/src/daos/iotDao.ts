@@ -14,6 +14,7 @@ export class IotDao {
       temperature: 20,
       fanSpeed: FanSpeed.FAN_SPEED_1,
       on: true,
+      scheduled: false,
     }
 
     db.set('command', defaultCmd);
@@ -26,6 +27,7 @@ export class IotDao {
 
     db.set('command', {
       ...command,
+      scheduled: false,
       ...cmd,
     })
 

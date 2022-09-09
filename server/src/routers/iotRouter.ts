@@ -10,9 +10,3 @@ iotRouter.get('/command', async (req, res) => {
 
   res.send(command);
 });
-
-iotRouter.put('/command', async (req, res) => {
-  const command = iotDao.update(req.body);
-
-  res.send(command);
-});
