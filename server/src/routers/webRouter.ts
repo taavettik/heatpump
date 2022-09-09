@@ -3,12 +3,15 @@ import { Router, default as express } from "express";
 import fs from 'fs/promises';
 import { IotDao } from '../daos/iotDao';
 import { FanSpeed } from '../common/schema';
+import { authMiddleware } from '../middleware/authMiddleware';
 
 export const webRouter = Router();
 
 const iotDao = new IotDao();
 
 webRouter.use(express.static('./static'))
+
+webRouter.use(authMiddleware);
 
 webRouter.get('/', async (req, res) => {
   const file = await fs.readFile('./src/templates/index.hbs', 'utf8');

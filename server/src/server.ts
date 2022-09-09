@@ -1,10 +1,13 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import './common/handlebars';
 import { iotRouter } from './routers/iotRouter';
 import './common/db';
 import { json, urlencoded } from 'body-parser';
 import { webRouter } from './routers/webRouter';
 import { SchedulingService } from './services/schedulingService';
+import { authMiddleware } from './middleware/authMiddleware';
+import { authRouter } from './routers/authRouter';
 
 const schedulingService = new SchedulingService();
 
@@ -16,10 +19,14 @@ schedulingService.run();
 
 const app = express();
 
+app.use(cookieParser());
 app.use(json());
 app.use(urlencoded());
 
-app.use('/', webRouter);
 app.use('/iot', iotRouter);
+
+app.use('/', authRouter);
+
+app.use('/', webRouter);
 
 app.listen(3123, () => console.log('Listening..'));
