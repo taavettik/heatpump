@@ -1,6 +1,6 @@
-import { parse } from "date-fns";
-import { AcCommand, FanSpeed, Mode } from "../common/schema";
-import { IotDao } from "../daos/iotDao";
+import { parse } from 'date-fns';
+import { AcCommand, FanSpeed, Mode } from '../common/schema';
+import { IotDao } from '../daos/iotDao';
 
 enum Weekday {
   SUNDAY,
@@ -12,7 +12,13 @@ enum Weekday {
   SATURDAY,
 }
 
-const WORK_DAYS = [Weekday.MONDAY, Weekday.TUESDAY, Weekday.WEDNESDAY, Weekday.THURSDAY, Weekday.FRIDAY];
+const WORK_DAYS = [
+  Weekday.MONDAY,
+  Weekday.TUESDAY,
+  Weekday.WEDNESDAY,
+  Weekday.THURSDAY,
+  Weekday.FRIDAY,
+];
 
 interface Schedule {
   from: Date;
@@ -28,13 +34,13 @@ const schedules: Schedule[] = [
     weekdays: [...WORK_DAYS],
     command: {
       fanSpeed: FanSpeed.FAN_SPEED_5,
-    }
-  }
+    },
+  },
 ];
 
 /**
  * Returns true if time of 'c' is between that of 'a' and 'b', false otherwise
- * 
+ *
  * a <= c <= b
  */
 function isTimeBetween(a: Date, b: Date, c: Date) {
@@ -49,11 +55,11 @@ function isTimeBetween(a: Date, b: Date, c: Date) {
   return cMinutes >= lowerBound && cMinutes <= upperBound;
 }
 
-function getCurrentSchedule(schedules: Schedule[]) {  
-  const schedule = schedules.find(s => {
+function getCurrentSchedule(schedules: Schedule[]) {
+  const schedule = schedules.find((s) => {
     const timeMatches = isTimeBetween(s.from, s.to, new Date());
 
-    const dayMatches = s.weekdays.some(day => day === new Date().getDay());
+    const dayMatches = s.weekdays.some((day) => day === new Date().getDay());
 
     return timeMatches && dayMatches;
   });
@@ -63,7 +69,7 @@ function getCurrentSchedule(schedules: Schedule[]) {
 
 export class SchedulingService {
   currentSchedule: Schedule | undefined;
-  
+
   constructor(private readonly iotDao = new IotDao()) {
     const currentSchedule = getCurrentSchedule(schedules);
 
@@ -75,17 +81,17 @@ export class SchedulingService {
   }
 
   applySchedule(schedule: Schedule) {
-    this.log(`Applying schedule: ${JSON.stringify(schedule)}`)
+    this.log(`Applying schedule: ${JSON.stringify(schedule)}`);
     this.currentSchedule = schedule;
 
     this.iotDao.update({
       ...schedule.command,
       scheduled: true,
-    })
+    });
   }
-  
+
   run() {
-    this.log(`Running...`)
+    this.log(`Running...`);
     const newSchedule = getCurrentSchedule(schedules);
 
     if (newSchedule === this.currentSchedule) {
@@ -106,6 +112,6 @@ export class SchedulingService {
   }
 
   private log(msg: string) {
-    console.log(`${new Date().toISOString()} [Scheduler]: ${msg}`)
+    console.log(`${new Date().toISOString()} [Scheduler]: ${msg}`);
   }
 }

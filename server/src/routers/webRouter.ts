@@ -1,5 +1,5 @@
 import hbs from 'handlebars';
-import { Router, default as express } from "express";
+import { Router, default as express } from 'express';
 import fs from 'fs/promises';
 import { IotDao } from '../daos/iotDao';
 import { FanSpeed } from '../common/schema';
@@ -9,7 +9,7 @@ export const webRouter = Router();
 
 const iotDao = new IotDao();
 
-webRouter.use(express.static('./static'))
+webRouter.use(express.static('./static'));
 
 webRouter.use(authMiddleware);
 
@@ -21,23 +21,25 @@ webRouter.get('/', async (req, res) => {
 
   console.log(command);
 
-  res.send(template({
-    ...command,
-    fanSpeed: command.fanSpeed + 1,
-  }));
+  res.send(
+    template({
+      ...command,
+      fanSpeed: command.fanSpeed + 1,
+    }),
+  );
 });
 
 webRouter.post('/temp/increase', async (req, res) => {
   iotDao.update({
     temperature: Math.min(iotDao.get().temperature + 1, 28),
-  })
+  });
   res.redirect('/');
 });
 
 webRouter.post('/temp/decrease', async (req, res) => {
   iotDao.update({
     temperature: Math.max(iotDao.get().temperature - 1, 15),
-  })
+  });
   res.redirect('/');
 });
 
@@ -49,7 +51,7 @@ webRouter.post('/fan/increase', async (req, res) => {
 
   iotDao.update({
     fanSpeed: newFanSpeed,
-  })
+  });
   res.redirect('/');
 });
 
@@ -61,13 +63,13 @@ webRouter.post('/fan/decrease', async (req, res) => {
 
   iotDao.update({
     fanSpeed: newFanSpeed,
-  })
+  });
   res.redirect('/');
 });
 
 webRouter.post('/toggle', async (req, res) => {
   iotDao.update({
-    on: !iotDao.get().on
+    on: !iotDao.get().on,
   });
   res.redirect('/');
-})
+});

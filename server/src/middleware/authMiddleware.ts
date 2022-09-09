@@ -1,8 +1,12 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { config } from "../common/config";
+import { config } from '../common/config';
 
-export function authMiddleware(req: Request<any>, res: Response, next: NextFunction) {
+export function authMiddleware(
+  req: Request<any>,
+  res: Response,
+  next: NextFunction,
+) {
   const cookie = req.cookies?.[config.JWT_COOKIE];
 
   if (!cookie) {
@@ -17,13 +21,13 @@ export function authMiddleware(req: Request<any>, res: Response, next: NextFunct
     if (!isValid) {
       throw new Error();
     }
-  } catch(e) {
+  } catch (e) {
     console.error(e);
     res.status(403);
     res.send('Forbidden');
     return;
   }
 
-  console.log('>> cook', cookie)
+  console.log('>> cook', cookie);
   next();
 }

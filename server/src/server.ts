@@ -13,7 +13,7 @@ const schedulingService = new SchedulingService();
 
 setInterval(() => {
   schedulingService.run();
-}, 60000)
+}, 60000);
 
 schedulingService.run();
 

@@ -1,5 +1,5 @@
-import { db } from "../common/db";
-import { AcCommand, FanSpeed, Mode } from "../common/schema";
+import { db } from '../common/db';
+import { AcCommand, FanSpeed, Mode } from '../common/schema';
 
 export class IotDao {
   get(): AcCommand {
@@ -15,7 +15,7 @@ export class IotDao {
       fanSpeed: FanSpeed.FAN_SPEED_1,
       on: true,
       scheduled: false,
-    }
+    };
 
     db.set('command', defaultCmd);
 
@@ -29,7 +29,7 @@ export class IotDao {
       ...command,
       scheduled: false,
       ...cmd,
-    })
+    });
 
     return this.get();
   }

@@ -1,5 +1,5 @@
-import { Router } from "express";
-import { IotDao } from "../daos/iotDao";
+import { Router } from 'express';
+import { IotDao } from '../daos/iotDao';
 
 export const iotRouter = Router();
 
