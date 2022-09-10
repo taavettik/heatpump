@@ -14,8 +14,6 @@ authRouter.get('/login', async (req, res) => {
 authRouter.post('/login', (req, res) => {
   const { username, password } = req.body;
 
-  console.log(username, password, config.ROOT_PASSWORD);
-
   if (username === 'root' && password === config.ROOT_PASSWORD) {
     res.cookie(config.JWT_COOKIE, jwt.sign('true', config.JWT_SECRET));
     res.redirect('/');

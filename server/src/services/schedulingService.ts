@@ -20,6 +20,8 @@ const WORK_DAYS = [
   Weekday.FRIDAY,
 ];
 
+const ALL_DAYS = [...WORK_DAYS, Weekday.SATURDAY, Weekday.SUNDAY];
+
 interface Schedule {
   from: Date;
   to: Date;
@@ -33,6 +35,25 @@ const schedules: Schedule[] = [
     to: parse('16:30', 'HH:mm', new Date()),
     weekdays: [...WORK_DAYS],
     command: {
+      temperature: 20,
+      fanSpeed: FanSpeed.FAN_SPEED_5,
+    },
+  },
+  {
+    from: parse('16:30', 'HH:mm', new Date()),
+    to: parse('22:00', 'HH:mm', new Date()),
+    weekdays: [...WORK_DAYS],
+    command: {
+      temperature: 20,
+      fanSpeed: FanSpeed.FAN_SPEED_1,
+    },
+  },
+  {
+    from: parse('01:00', 'HH:mm', new Date()),
+    to: parse('05:00', 'HH:mm', new Date()),
+    weekdays: [...ALL_DAYS],
+    command: {
+      temperature: 24,
       fanSpeed: FanSpeed.FAN_SPEED_5,
     },
   },
