@@ -27,6 +27,9 @@
 // Mitsubishi AC routines
 // ------------------
 
+#define ERROR_PIN 12
+#define OK_PIN 13
+
 int halfPeriodicTime;
 int IRpin;
 int khz;
@@ -274,13 +277,18 @@ const char* ssid = "HUAWEI-B593-B6C7";
 const char* password = "mandoliinim1es";
 
 //Your Domain name with URL path or IP address with path
-String serverName = "http://192.168.1.7:3123/iot";
+String serverName = "http://192.168.1.101:3123/iot";
 
 void setupWifi() {
   WiFi.begin(ssid, password);
   Serial.println("Connecting");
+
+  boolean state = true;
+  
   while(WiFi.status() != WL_CONNECTED) {
+    digitalWrite(OK_PIN, state ? HIGH : LOW);
     delay(500);
+    state = !state;
     Serial.print(".");
   }
   Serial.println("");
@@ -295,17 +303,6 @@ void setupWifi() {
 *  Note: That's also the entry point after DeepSleep TimeOut 
 */
 /***************************************************************************/
-void setup() {
-  // put your setup code here, to run once:
-  IRpin=4;
-  khz=38;
-  halfPeriodicTime = 500/khz;
-  pinMode(IRpin, OUTPUT);
-  Serial.begin(115200);
-  Serial.println("Demo Started.");
-
-  setupWifi();
-}
 
 int temperature = 20;
 HvacMode hvacMode = HVAC_HOT;
@@ -326,10 +323,12 @@ void applyCommand(int newTemp, HvacMode newMode, HvacFanMode newFanSpeed, boolea
   sendHvacMitsubishi(hvacMode, temperature, fanSpeed, VANNE_AUTO_MOVE, !power);
 }
 
-void fetchCommand() {
+boolean fetchCommand() {
   WiFiClient client;
 
   HTTPClient http;
+
+  boolean success = true;
 
   Serial.print("[HTTP] begin...\n");
   if (http.begin(client, serverName + "/command")) {
@@ -339,7 +338,9 @@ void fetchCommand() {
 
     if (httpCode < 0) {
       Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
-      return;
+      http.end();
+
+      return false;
     }
 
     
@@ -359,17 +360,46 @@ void fetchCommand() {
     Serial.println(String(temperature) + ", " + String(hvacMode) + ", " + String(fanSpeed) + ", " + (power ? "ON" : "OFF"));
 
     applyCommand(temperature, hvacMode, fanSpeed, power);
+  } else {
+    success = false;
   }
 
   http.end();
+
+  return success;
+}
+
+boolean error = false;
+
+// -------
+// setup ()
+// -------
+void setup() {
+  IRpin=4;
+  khz=38;
+  halfPeriodicTime = 500/khz;
+  pinMode(IRpin, OUTPUT);
+  pinMode(OK_PIN, OUTPUT);
+  pinMode(ERROR_PIN, OUTPUT);
+  Serial.begin(115200);
+
+  setupWifi();
+  setupOTA();
+
+  digitalWrite(OK_PIN, HIGH);
 }
 
 /****************************************************************************
 /* Loop ()
 /***************************************************************************/
 void loop() {
-      fetchCommand();
+  handleOTA();
+  boolean success = fetchCommand();
+  error = !success;
+
+  digitalWrite(OK_PIN, error ? LOW : HIGH);
+  digitalWrite(ERROR_PIN, error ? HIGH : LOW);
   
-      Serial.println("Sleeping...");
-      delay(10000);
+  Serial.println("Sleeping");
+  delay(10000);
 }
