@@ -17,7 +17,7 @@ jobs:
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBERNETES_CONFIG }}
-      - uses: azure/k8s-create-secret@v1
+      - uses: azure/k8s-create-secret@v2
         with:
           namespace: 'heatpump-${{ env.PROJECT_ENV }}'
           secret-type: 'generic'
@@ -35,7 +35,7 @@ jobs:
       - uses: docker/setup-buildx-action@v1
       - uses: docker/login-action@v1 
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: taavettik
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - uses: docker/build-push-action@v2
         with:
