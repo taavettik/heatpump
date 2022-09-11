@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  ingress:
+    container_name: heatpump-ingress
+    image: nginx:stable-alpine
+    volumes:
+      - ./docker-nginx.conf:/etc/nginx/nginx.conf
+    ports: 
+      - "3031:80"
+  backend:
+    container_name: heatpump-backend
+    build:
+      context: ./server
+      dockerfile: Dockerfile.build
+    command: npm run start:dev
+    volumes: 
+      - ./server:/service
+    environment:
+      - PORT=1234
+
+volumes: 
+  riffy-pg:

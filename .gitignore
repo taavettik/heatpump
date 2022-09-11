@@ -3,3 +3,4 @@ store.json
 .parcel-cache
 secrets.json
 server/build
+.DS_Store

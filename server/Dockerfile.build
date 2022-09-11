@@ -1,0 +1,10 @@
+FROM node:lts-alpine
+
+WORKDIR /service
+COPY . .
+
+RUN apk add python3 make g++ && \
+  yarn install --frozen-lockfile && \
+  yarn run build
+
+CMD ["node", "./build/server.js"]

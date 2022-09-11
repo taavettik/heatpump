@@ -8,6 +8,7 @@ import { webRouter } from './routers/webRouter';
 import { SchedulingService } from './services/schedulingService';
 import { authMiddleware } from './middleware/authMiddleware';
 import { authRouter } from './routers/authRouter';
+import { config } from './common/config';
 
 const schedulingService = new SchedulingService();
 
@@ -29,4 +30,4 @@ app.use('/', authRouter);
 
 app.use('/', webRouter);
 
-app.listen(3123, () => console.log('Listening..'));
+app.listen(config.PORT, () => console.log(`Listening on ${config.PORT}...`));

@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${PROJECT_NAME}-client-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/rule-type: "PathPrefixStrip"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+    - secretName: heatpump-tls
+      hosts:
+        - ${HOST}
+        - kukkonen.dev
+  rules:
+  - host: ${HOST}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ${PROJECT_NAME}-backend
+            port:
+              number: 80
