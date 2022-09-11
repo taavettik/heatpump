@@ -1,8 +1,6 @@
-import secrets from '../../secrets.json';
-
 export const config = {
-  JWT_SECRET: secrets.JWT_SECRET,
+  JWT_SECRET: process.env.JWT_SECRET || 'secret1234',
   JWT_COOKIE: 'ac:token',
-  ROOT_PASSWORD: secrets.ROOT_PASSWORD,
+  ROOT_PASSWORD: process.env.ROOT_PASSWORD || 'root',
   PORT: Number(process.env.PORT) || 1234,
 };

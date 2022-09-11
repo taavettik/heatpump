@@ -36,3 +36,13 @@ spec:
         env:
         - name: "PROJECT_ENV"
           value: ${PROJECT_ENV}
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: ${PROJECT_NAME}-secrets
+              key: jwt-secret        
+        - name: ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ${PROJECT_NAME}-secrets
+              key: root-password

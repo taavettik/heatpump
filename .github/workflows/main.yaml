@@ -21,9 +21,11 @@ jobs:
         with:
           namespace: 'heatpump-${{ env.PROJECT_ENV }}'
           secret-type: 'generic'
-          secret-name: heatpump-root-user
-          arguments:  --from-literal=password=${{ secrets[env.DB_CREDENTIALS] }}
-  
+          secret-name: heatpump-secrets
+          arguments:  >
+            --from-literal=root-password=${{ secrets[env.ROOT_PASSWORD] }}
+            --from-literal=jwt-secret=${{ secrets[env.JWT_SECRET] }}
+
   build-backend:
     runs-on: ubuntu-latest
     needs: deploy-secrets
