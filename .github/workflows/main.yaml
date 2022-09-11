@@ -23,8 +23,8 @@ jobs:
           secret-type: 'generic'
           secret-name: heatpump-secrets
           arguments:  >
-            --from-literal=root-password=${{ secrets[env.ROOT_PASSWORD] }}
-            --from-literal=jwt-secret=${{ secrets[env.JWT_SECRET] }}
+            --from-literal=root-password=${{ secrets.ROOT_PASSWORD }}
+            --from-literal=jwt-secret=${{ secrets.JWT_SECRET }}
 
   build-backend:
     runs-on: ubuntu-latest
