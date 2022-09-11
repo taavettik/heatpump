@@ -22,4 +22,4 @@ spec:
           service:
             name: ${PROJECT_NAME}-backend
             port:
-              number: 80
+              number: 1234

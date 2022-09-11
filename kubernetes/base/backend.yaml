@@ -8,7 +8,7 @@ metadata:
     app: ${PROJECT_NAME}-backend
 spec:
   ports:
-  - port: 3123
+  - port: 1234
     name: ${PROJECT_NAME}-backend
   selector:
     app: ${PROJECT_NAME}-backend
@@ -36,6 +36,8 @@ spec:
         env:
         - name: "PROJECT_ENV"
           value: ${PROJECT_ENV}
+        - name: "PORT"
+          value: 1234
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
