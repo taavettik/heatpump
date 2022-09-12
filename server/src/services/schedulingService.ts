@@ -1,4 +1,4 @@
-import { parse } from 'date-fns';
+import { add, parse } from 'date-fns';
 import { AcCommand, FanSpeed, Mode } from '../common/schema';
 import { IotDao } from '../daos/iotDao';
 
@@ -29,10 +29,16 @@ interface Schedule {
   command: Partial<AcCommand>;
 }
 
+const defaultCommand: Partial<AcCommand> = {
+  temperature: 20,
+  fanSpeed: FanSpeed.FAN_SPEED_1,
+};
+
+// NOTE: times are in UTC
 const schedules: Schedule[] = [
   {
-    from: parse('10:00', 'HH:mm', new Date()),
-    to: parse('16:30', 'HH:mm', new Date()),
+    from: parse('7:00', 'HH:mm', new Date()),
+    to: parse('13:30', 'HH:mm', new Date()),
     weekdays: [...WORK_DAYS],
     command: {
       temperature: 20,
@@ -40,17 +46,8 @@ const schedules: Schedule[] = [
     },
   },
   {
-    from: parse('16:30', 'HH:mm', new Date()),
-    to: parse('22:00', 'HH:mm', new Date()),
-    weekdays: [...WORK_DAYS],
-    command: {
-      temperature: 20,
-      fanSpeed: FanSpeed.FAN_SPEED_1,
-    },
-  },
-  {
-    from: parse('01:00', 'HH:mm', new Date()),
-    to: parse('05:00', 'HH:mm', new Date()),
+    from: parse('22:00', 'HH:mm', new Date()),
+    to: parse('02:00', 'HH:mm', new Date()),
     weekdays: [...ALL_DAYS],
     command: {
       temperature: 24,
@@ -120,9 +117,21 @@ export class SchedulingService {
     }
 
     if (!newSchedule && this.currentSchedule) {
-      this.iotDao.update({
-        scheduled: false,
-      });
+      /*
+        When switching from a scheduled command to a time outside of the schedule,
+        revert back to the default command
+      */
+      const currentCommand = this.iotDao.get();
+
+      this.iotDao.update(
+        currentCommand.scheduled
+          ? {
+              scheduled: false,
+              ...defaultCommand,
+            }
+          : { scheduled: false },
+      );
+
       this.currentSchedule = undefined;
     }
 
