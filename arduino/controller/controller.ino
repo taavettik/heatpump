@@ -277,16 +277,19 @@ const char* ssid = "HUAWEI-B593-B6C7";
 const char* password = "mandoliinim1es";
 
 //Your Domain name with URL path or IP address with path
-String serverName = "http://192.168.1.101:3123/iot";
+String serverName = "https://ac.kukkonen.dev/iot";
 
 void setupWifi() {
   WiFi.begin(ssid, password);
   Serial.println("Connecting");
 
   boolean state = true;
+
+  int startTime = millis();
   
-  while(WiFi.status() != WL_CONNECTED) {
+  while(WiFi.status() != WL_CONNECTED && (millis() - startTime) < 30000) {
     digitalWrite(OK_PIN, state ? HIGH : LOW);
+    digitalWrite(ERROR_PIN, LOW);
     delay(500);
     state = !state;
     Serial.print(".");
@@ -324,11 +327,16 @@ void applyCommand(int newTemp, HvacMode newMode, HvacFanMode newFanSpeed, boolea
 }
 
 boolean fetchCommand() {
-  WiFiClient client;
+  WiFiClientSecure client;
+  client.setInsecure();
 
   HTTPClient http;
 
   boolean success = true;
+
+  if (WiFi.status() != WL_CONNECTED) {
+    return false;
+  }
 
   Serial.print("[HTTP] begin...\n");
   if (http.begin(client, serverName + "/command")) {
@@ -393,13 +401,25 @@ void setup() {
 /* Loop ()
 /***************************************************************************/
 void loop() {
+  if (WiFi.status() != WL_CONNECTED) {
+    // attempt to reconnect if disconnected from wifi
+    WiFi.disconnect();
+    setupWifi();
+  }
+  
   handleOTA();
   boolean success = fetchCommand();
   error = !success;
 
-  digitalWrite(OK_PIN, error ? LOW : HIGH);
-  digitalWrite(ERROR_PIN, error ? HIGH : LOW);
-  
-  Serial.println("Sleeping");
-  delay(10000);
+  if (error) {
+    digitalWrite(OK_PIN, LOW);
+    digitalWrite(ERROR_PIN, HIGH);
+    delay(10000);  
+  } else {
+    digitalWrite(OK_PIN, HIGH);
+    digitalWrite(ERROR_PIN, LOW);
+    delay(1000);
+    digitalWrite(OK_PIN, LOW);
+    delay(9000);
+  }
 }
