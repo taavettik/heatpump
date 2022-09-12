@@ -132,6 +132,12 @@ export class SchedulingService {
           : { scheduled: false },
       );
 
+      this.log(
+        `Current schedule ended${
+          currentCommand.scheduled ? `, reverting back to default command` : ''
+        }`,
+      );
+
       this.currentSchedule = undefined;
     }
 
