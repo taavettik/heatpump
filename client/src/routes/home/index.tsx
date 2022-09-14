@@ -1,7 +1,17 @@
+import { Stack } from '../../common/components/Layout';
+import { Page } from '../../common/components/Page';
+
 interface Props {
   path?: string;
 }
 
 export function HomePage(props: Props) {
-  return <h1>Home page</h1>;
+  return (
+    <Page>
+      <Stack justify="flex-end" axis="x" spacing="small">
+        <span>a</span> <span>b</span> <span>c</span>
+      </Stack>
+      <h1>Home page</h1>
+    </Page>
+  );
 }
