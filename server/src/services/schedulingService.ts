@@ -38,7 +38,7 @@ const defaultCommand: Partial<AcCommand> = {
 const schedules: Schedule[] = [
   {
     from: parse('7:00', 'HH:mm', new Date()),
-    to: parse('13:30', 'HH:mm', new Date()),
+    to: parse('13:00', 'HH:mm', new Date()),
     weekdays: [...WORK_DAYS],
     command: {
       temperature: 20,
@@ -51,6 +51,15 @@ const schedules: Schedule[] = [
     weekdays: [...ALL_DAYS],
     command: {
       temperature: 24,
+      fanSpeed: FanSpeed.FAN_SPEED_5,
+    },
+  },
+  {
+    from: parse('13:00', 'HH:mm', new Date()),
+    to: parse('17:00', 'HH:mm', new Date()),
+    weekdays: [...WORK_DAYS],
+    command: {
+      temperature: 18,
       fanSpeed: FanSpeed.FAN_SPEED_5,
     },
   },
