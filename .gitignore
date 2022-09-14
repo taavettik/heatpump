@@ -4,3 +4,4 @@ store.json
 secrets.json
 server/build
 .DS_Store
+dist

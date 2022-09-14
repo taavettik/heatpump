@@ -11,12 +11,20 @@ services:
     container_name: heatpump-backend
     build:
       context: ./server
-      dockerfile: Dockerfile.build
+      dockerfile: Dockerfile
     command: npm run start:dev
     volumes: 
       - ./server:/service
     environment:
       - PORT=1234
+  client:
+    container_name: heatpump-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    command: npm run start:dev
+    volumes:
+      - ./client:/service
 
 volumes: 
   riffy-pg:
