@@ -1,10 +1,12 @@
 import { createStitches } from '@stitches/react';
 
-const theme = {
+const baseTheme = {
   colors: {
     primaryMain: '#1C77C3',
     primaryMuted1: '#196EB3',
     primaryMuted2: '#1763A1',
+    //warmMain: '#FF4000',
+    warmMain: '#FF934F',
   },
   space: {
     xxxsmall: '4px',
@@ -19,8 +21,8 @@ const theme = {
   },
 };
 
-export type Spacing = keyof typeof theme['space'];
+export type Spacing = keyof typeof baseTheme['space'];
 
-export const { styled, css, globalCss } = createStitches({
-  theme,
+export const { styled, css, globalCss, theme } = createStitches({
+  theme: baseTheme,
 });

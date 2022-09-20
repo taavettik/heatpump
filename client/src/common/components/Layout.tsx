@@ -1,10 +1,10 @@
 import { CSSProperties } from '@stitches/react';
 import { ComponentChildren } from 'preact';
-import { Spacing, styled } from '../constants/styled';
+import { Spacing as TSpacing, styled } from '../constants/styled';
 
-interface Props {
+interface StackProps {
   axis?: 'x' | 'y';
-  spacing?: Spacing;
+  spacing?: TSpacing;
   children?: ComponentChildren;
 
   align?: CSSProperties['alignItems'];
@@ -12,7 +12,7 @@ interface Props {
   width?: CSSProperties['width'];
 }
 
-export function Stack({ axis, spacing, children, ...styles }: Props) {
+export function Stack({ axis, spacing, children, ...styles }: StackProps) {
   const style: CSSProperties = {
     flexDirection: axis === 'x' ? 'row' : 'column',
     alignItems: styles.align,
@@ -36,6 +36,21 @@ export function Stack({ axis, spacing, children, ...styles }: Props) {
     >
       {children}
     </BaseStack>
+  );
+}
+
+interface SpacingProps {
+  size?: TSpacing;
+  axis?: 'x' | 'y';
+}
+
+export function Spacing({ size = 'small', axis = 'y' }: SpacingProps) {
+  return (
+    <BaseStack
+      css={{
+        [axis === 'y' ? 'margin-top' : 'margin-left']: `$${size}`,
+      }}
+    ></BaseStack>
   );
 }
 

@@ -26,4 +26,7 @@ const PageWrapper = styled('div', {
   width: '100%',
   padding: '$small',
   maxWidth: '600px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
 });

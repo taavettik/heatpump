@@ -1,20 +1,37 @@
-import { Stack } from '../../common/components/Layout';
+import { useState } from 'preact/hooks';
+import { Spacing, Stack } from '../../common/components/Layout';
 import { Page } from '../../common/components/Page';
+import { Text } from '../../common/components/Text';
 import { WheelInput } from './WheelInput';
 
 interface Props {
   path?: string;
 }
 
+function tempToAngle(temp: number) {
+  return ((temp - 10) / 20) * 270;
+}
+
+function angleToTemp(angle: number) {
+  return (angle / 270) * 20 + 10;
+}
+
 export function HomePage(props: Props) {
+  const [temp, setTemp] = useState(20);
+
   return (
     <Page>
-      <Stack justify="flex-end" axis="x" spacing="small">
-        <span>a</span> <span>b</span> <span>c</span>
-      </Stack>
-      <h1>Home page</h1>
+      <Spacing size="xlarge" />
 
-      <WheelInput />
+      <Text variant="title1">Good day!</Text>
+
+      <Spacing size="normal" />
+
+      <WheelInput
+        startAngle={tempToAngle(temp)}
+        onChange={(angle) => setTemp(Math.round(angleToTemp(angle)))}
+        header={`${temp} °C`}
+      />
     </Page>
   );
 }
