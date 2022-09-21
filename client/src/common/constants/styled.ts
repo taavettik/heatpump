@@ -5,8 +5,13 @@ const baseTheme = {
     primaryMain: '#1C77C3',
     primaryMuted1: '#196EB3',
     primaryMuted2: '#1763A1',
+    primaryMuted3: '#124D7D',
     //warmMain: '#FF4000',
     warmMain: '#FF934F',
+
+    text: 'white',
+    muted1: '#eaeaea',
+    muted2: '#D8D8D8',
   },
   space: {
     xxxsmall: '4px',
@@ -22,6 +27,8 @@ const baseTheme = {
 };
 
 export type Spacing = keyof typeof baseTheme['space'];
+
+export type Color = keyof typeof baseTheme['colors'];
 
 export const { styled, css, globalCss, theme } = createStitches({
   theme: baseTheme,
