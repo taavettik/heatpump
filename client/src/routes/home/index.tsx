@@ -1,7 +1,9 @@
 import { useState } from 'preact/hooks';
 import { Spacing, Stack } from '../../common/components/Layout';
 import { Page } from '../../common/components/Page';
+import { Slider } from '../../common/components/Slider';
 import { Text } from '../../common/components/Text';
+import { FanSlider } from './FanSlider';
 import { WheelInput } from './WheelInput';
 
 interface Props {
@@ -32,6 +34,8 @@ export function HomePage(props: Props) {
         onChange={(angle) => setTemp(Math.round(angleToTemp(angle)))}
         header={`${temp} °C`}
       />
+
+      <FanSlider />
     </Page>
   );
 }
