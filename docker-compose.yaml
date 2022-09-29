@@ -7,6 +7,16 @@ services:
       - ./docker-nginx.conf:/etc/nginx/nginx.conf
     ports: 
       - "3031:80"
+  db:
+    container_name: heatpump-db
+    build:
+      context: ./database
+    environment:
+      POSTGRES_USER: heatpump
+      POSTGRES_DB: heatpump
+      POSTGRES_PASSWORD: secret1234
+    volumes:
+      - ./database:/service
   backend:
     container_name: heatpump-backend
     build:
@@ -17,14 +27,16 @@ services:
       - ./server:/service
     environment:
       - PORT=1234
-  client:
-    container_name: heatpump-client
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    command: npm run start:dev
-    volumes:
-      - ./client:/service
+  
+  # NOTE: client doesn't work locally on m1 mac due to parcel watcher
+  #client:
+  #  container_name: heatpump-client
+  #  build:
+  #    context: ./client
+  #    dockerfile: Dockerfile
+  #  command: npm run start:dev
+  #  volumes:
+  #    - ./client:/service
 
 volumes: 
   riffy-pg:

@@ -1,0 +1,7 @@
+%syntax-version=1.0.0
+%project=heatpump
+
+uuid 2022-09-28T18:09:53Z heatpump <heatpump@kukkonen.dev> # Add uuid extension
+app_user 2022-09-28T18:11:18Z heatpump <heatpump@kukkonen.dev> # Add table for users
+schedule 2022-09-28T18:12:35Z heatpump <heatpump@kukkonen.dev> # Add relations for schedules
+heater 2022-09-29T11:03:15Z heatpump <heatpump@kukkonen.dev> # Add table for heating devices
