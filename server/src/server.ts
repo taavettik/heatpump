@@ -9,6 +9,7 @@ import { SchedulingService } from './services/schedulingService';
 import { authMiddleware } from './middleware/authMiddleware';
 import { authRouter } from './routers/authRouter';
 import { config } from './common/config';
+import { heatpumpRouter } from './routers/heatpumpRouter';
 
 const schedulingService = new SchedulingService();
 
@@ -29,5 +30,7 @@ app.use('/iot', iotRouter);
 app.use('/', authRouter);
 
 app.use('/', webRouter);
+
+app.use('/heatpump', heatpumpRouter);
 
 app.listen(config.PORT, () => console.log(`Listening on ${config.PORT}...`));
