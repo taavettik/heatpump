@@ -6,4 +6,5 @@ export const config = {
   DB_USER: process.env.DB_USER as string,
   DB_PASSWORD: process.env.DB_PASSWORD as string, // could/should use volume-mounted secrets..
   DB_DATABASE: process.env.DB_DATABASE as string,
+  DB_HOST: process.env.DB_HOST as string,
 };

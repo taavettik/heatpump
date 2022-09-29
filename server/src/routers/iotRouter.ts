@@ -1,12 +1,13 @@
 import { Router } from 'express';
+import { FastifyPluginAsync } from 'fastify';
 import { IotDao } from '../daos/iotDao';
-
-export const iotRouter = Router();
 
 const iotDao = new IotDao();
 
-iotRouter.get('/command', async (req, res) => {
-  const command = iotDao.get();
+export const iotRouter: FastifyPluginAsync = async (fastify) => {
+  fastify.get('/command', async (req, res) => {
+    const command = iotDao.get();
 
-  res.send(command);
-});
+    res.send(command);
+  });
+};

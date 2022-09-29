@@ -30,6 +30,7 @@ services:
       DB_USER: heatpump
       DB_DATABASE: heatpump
       DB_PASSWORD: secret1234
+      DB_HOST: heatpump-db
   
   # NOTE: client doesn't work locally on m1 mac due to parcel watcher
   #client:

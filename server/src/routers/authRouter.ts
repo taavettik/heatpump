@@ -2,23 +2,26 @@ import jwt from 'jsonwebtoken';
 import { Router } from 'express';
 import { config } from '../common/config';
 import { createTemplate } from '../common/handlebars';
+import { FastifyPluginCallback } from 'fastify';
+import { badRequest } from '@hapi/boom';
+import Container from 'typedi';
+import { UserService } from '../services/userService';
 
-export const authRouter = Router();
+export const authRouter: FastifyPluginCallback = async (fastify) => {
+  const userService = Container.get(UserService);
 
-authRouter.get('/login', async (req, res) => {
-  const template = await createTemplate('login.hbs');
+  fastify.post(`/login`, async (req, res) => {
+    const { username, password } = req.body as {
+      username: string;
+      password: string;
+    };
 
-  res.send(template({}));
-});
+    if (!username || !password) {
+      throw badRequest(`"username" and "password" must be provided`);
+    }
 
-authRouter.post('/login', (req, res) => {
-  const { username, password } = req.body;
-
-  if (username === 'root' && password === config.ROOT_PASSWORD) {
-    res.cookie(config.JWT_COOKIE, jwt.sign('true', config.JWT_SECRET));
-    res.redirect('/');
-    return;
-  }
-
-  res.redirect('/login?error=true');
-});
+    const token = await userService.login(req, username, password);
+    res.cookie(config.JWT_COOKIE, token);
+    res.send({ token });
+  });
+};

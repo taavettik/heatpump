@@ -5,7 +5,12 @@ import { CamelCase } from '../common/utils/types';
 
 @Service()
 export class HeatpumpDao {
-  get(db: Db) {
-    return db.one<CamelCase<Heatpump>>(`SELECT * FROM heatpump`);
+  get(db: Db, id: number) {
+    return db.one<CamelCase<Heatpump>>(
+      `SELECT * FROM heatpump WHERE device_id = $[id]`,
+      {
+        id,
+      },
+    );
   }
 }
