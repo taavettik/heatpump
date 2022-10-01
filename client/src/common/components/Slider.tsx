@@ -1,18 +1,23 @@
-import { useRef, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { DraggableCore } from 'react-draggable';
 import { styled } from '../constants/styled';
 import { Stack } from './Layout';
+
+interface Props {
+  value?: number;
+  onChange?: (val: number) => void;
+}
 
 /**
  * COMPLETELY unaccessible slider-component
  *
  * i'll implement keyboard navigation some day..
  */
-export function Slider() {
+export function Slider({ value: initialValue = 0, onChange }: Props) {
   /**
    * Value from 0 - 100 (%)
    */
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(initialValue);
 
   const containerRef = useRef<HTMLDivElement>();
 
@@ -37,7 +42,9 @@ export function Slider() {
           const percentage = Math.max(Math.min(1, x / parentRect.width), 0);
 
           setValue(percentage * 100);
+          console.log(Math.floor(percentage * 100));
         }}
+        onStop={() => onChange?.(value)}
       >
         <SliderThumb
           style={{

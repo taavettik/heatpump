@@ -77,15 +77,23 @@ function getPosition(angle: number) {
 interface Props {
   startAngle?: number;
   onChange?: (angle: number) => void;
+  onBlur?: () => void;
   header?: string | ((angle: number) => string);
 }
 
-export function WheelInput({ startAngle, onChange, header }: Props) {
+export function WheelInput({ startAngle, onChange, onBlur, header }: Props) {
   const [angle, setAngle] = useState(startAngle || 0);
   const [tempAngle, setTempAngle] = useState(angle);
 
   const handlePos = getPosition(angle);
   const blobPos = getPosition(tempAngle);
+
+  useEffect(() => {
+    if (startAngle !== undefined) {
+      setAngle(startAngle);
+      setTempAngle(startAngle);
+    }
+  }, [startAngle]);
 
   const parentRef = useRef<HTMLDivElement>(null);
 
@@ -125,7 +133,10 @@ export function WheelInput({ startAngle, onChange, header }: Props) {
 
           setTempAngle(newAngle);
         }}
-        onStop={() => setAngle(tempAngle)}
+        onStop={() => {
+          setAngle(tempAngle);
+          onBlur?.();
+        }}
       >
         <DragHandle
           /* this got real annoying */

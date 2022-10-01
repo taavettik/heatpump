@@ -1,4 +1,4 @@
-import { CamelCase, Resolved } from './types';
+import { CamelCase, Resolved } from '../../shared/types';
 
 function toCamelCase(str: string) {
   const arr = str.split(/_([a-z]+)/g);

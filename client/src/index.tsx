@@ -1,7 +1,8 @@
 import { render } from 'preact';
 import { App } from './App';
-import { h } from 'preact';
+import * as preact from 'preact';
 
-(window as any).h = h;
+(window as any).h = preact.h;
+(window as any).preact = preact;
 
 render(<App />, document.body);

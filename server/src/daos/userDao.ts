@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 import { AppUser } from '../../schema';
 import { Db } from '../common/db';
-import { CamelCase } from '../common/utils/types';
+import { CamelCase } from '../shared/types';
 
 @Service()
 export class UserDao {

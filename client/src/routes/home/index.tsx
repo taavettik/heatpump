@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'preact/hooks';
-import { fetchHeatpump } from '../../common/api';
+import { useEffect, useState } from 'preact/hooks';
+import { api } from '../../common/api';
 import { Spacing, Stack } from '../../common/components/Layout';
 import { Page } from '../../common/components/Page';
 import { Slider } from '../../common/components/Slider';
 import { Text } from '../../common/components/Text';
+import { useUpdateHeatpumpStateMutation } from '../../hooks/mutations';
 import { FanSlider } from './FanSlider';
 import { WheelInput } from './WheelInput';
 
@@ -21,11 +22,34 @@ function angleToTemp(angle: number) {
 }
 
 export function HomePage(props: Props) {
-  const { data } = useQuery(['heatpump'], fetchHeatpump);
+  const { data } = useQuery(['heatpump'], api.fetchHeatpump);
+  const updateState = useUpdateHeatpumpStateMutation();
 
-  console.log(data);
+  const [temp, setTemp] = useState(data?.temperature ?? 20);
+  const [fanSpeed, setFanSpeed] = useState(data?.fanSpeed ?? 20);
 
-  const [temp, setTemp] = useState(20);
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+    setTemp(data.temperature);
+    setFanSpeed(data.fanSpeed);
+  }, [data]);
+
+  const syncState = () => {
+    updateState.mutate({
+      temperature: temp,
+      fanSpeed: fanSpeed,
+    });
+  };
+
+  useEffect(() => {
+    syncState();
+  }, [fanSpeed]);
+
+  if (!data) {
+    return null;
+  }
 
   return (
     <Page>
@@ -39,9 +63,13 @@ export function HomePage(props: Props) {
         startAngle={tempToAngle(temp)}
         onChange={(angle) => setTemp(Math.round(angleToTemp(angle)))}
         header={`${temp} °C`}
+        onBlur={() => syncState()}
       />
 
-      <FanSlider />
+      <FanSlider
+        initialValue={data.fanSpeed}
+        onChange={(speed) => setFanSpeed(speed)}
+      />
     </Page>
   );
 }

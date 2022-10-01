@@ -25,6 +25,10 @@ export const authRouter: FastifyPluginCallback = async (fastify) => {
     res.send({ token });
   });
 
+  fastify.post(`/logout`, async (req, res) => {
+    res.clearCookie(config.JWT_COOKIE);
+  });
+
   fastify.get(`/me`, async (req, res) => {
     if (!req.user) {
       throw forbidden();
