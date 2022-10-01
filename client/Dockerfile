@@ -1,3 +1,3 @@
-FROM --platform=amd64 node:17
+FROM node:lts-alpine
 
 WORKDIR /service

@@ -4,4 +4,6 @@ BEGIN;
 
 DROP TABLE heatpump;
 
+DROP TYPE heatpump_mode;
+
 COMMIT;
