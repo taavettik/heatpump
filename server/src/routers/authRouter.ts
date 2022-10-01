@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { config } from '../common/config';
 import { createTemplate } from '../common/handlebars';
 import { FastifyPluginCallback } from 'fastify';
-import { badRequest } from '@hapi/boom';
+import { badRequest, forbidden } from '@hapi/boom';
 import Container from 'typedi';
 import { UserService } from '../services/userService';
 
@@ -23,5 +23,15 @@ export const authRouter: FastifyPluginCallback = async (fastify) => {
     const token = await userService.login(req, username, password);
     res.cookie(config.JWT_COOKIE, token);
     res.send({ token });
+  });
+
+  fastify.get(`/me`, async (req, res) => {
+    if (!req.user) {
+      throw forbidden();
+    }
+
+    const me = await userService.get(req, req.user?.id);
+
+    res.send(me);
   });
 };

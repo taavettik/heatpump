@@ -25,6 +25,7 @@ services:
     command: npm run start:dev
     volumes: 
       - ./server:/service
+      - ./shared:/service/src/shared
     environment:
       PORT: 1234
       DB_USER: heatpump
@@ -41,6 +42,7 @@ services:
     command: npm run start:dev
     volumes:
       - ./client:/service
+      - ./shared:/service/src/shared
 
 volumes: 
   riffy-pg:

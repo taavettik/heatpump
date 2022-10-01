@@ -6,7 +6,7 @@
   "scripts": {
     "start:dev": "nodemon --watch 'src/**/*.ts' --exec ts-node --files src/server.ts",
     "build": "tsc",
-    "generate:db": "docker compose exec backend npx pg-to-ts generate -c postgresql://heatpump:secret1234@db -o schema.ts"
+    "generate:db": "docker compose exec backend npx pg-to-ts generate -c postgresql://heatpump:secret1234@db -o src/shared/schema.ts"
   },
   "dependencies": {
     "@fastify/cookie": "^8.3.0",

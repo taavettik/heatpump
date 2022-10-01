@@ -1,4 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'preact/hooks';
+import { fetchHeatpump } from '../../common/api';
 import { Spacing, Stack } from '../../common/components/Layout';
 import { Page } from '../../common/components/Page';
 import { Slider } from '../../common/components/Slider';
@@ -19,6 +21,10 @@ function angleToTemp(angle: number) {
 }
 
 export function HomePage(props: Props) {
+  const { data } = useQuery(['heatpump'], fetchHeatpump);
+
+  console.log(data);
+
   const [temp, setTemp] = useState(20);
 
   return (
