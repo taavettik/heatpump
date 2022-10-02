@@ -12,9 +12,9 @@ CREATE TABLE schedule (
 
   fan_speed INTEGER NOT NULL,
   temperature INTEGER NOT NULL,
-  start_time TIME NOT NULL,
-  end_time TIME NOT NULL,
-  weekdays weekday[] NOT NULL DEFAULT '{}'::weekday[]
+  start_time TIME,
+  end_time TIME,
+  weekdays weekday[] DEFAULT '{}'::weekday[]
 );
 
 COMMIT;

@@ -19,6 +19,12 @@ export function Slider({ value: initialValue = 0, onChange }: Props) {
    */
   const [value, setValue] = useState(initialValue);
 
+  useEffect(() => {
+    if (value !== undefined) {
+      setValue(initialValue);
+    }
+  }, [initialValue]);
+
   const containerRef = useRef<HTMLDivElement>();
 
   return (

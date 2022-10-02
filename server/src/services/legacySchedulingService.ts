@@ -94,7 +94,7 @@ function getCurrentSchedule(schedules: Schedule[]) {
   return schedule;
 }
 
-export class SchedulingService {
+export class LegacySchedulingService {
   currentSchedule: Schedule | undefined;
 
   constructor(private readonly iotDao = new IotDao()) {
@@ -157,6 +157,6 @@ export class SchedulingService {
   }
 
   private log(msg: string) {
-    console.log(`${new Date().toISOString()} [Scheduler]: ${msg}`);
+    console.log(`${new Date().toISOString()} [LegacyScheduler]: ${msg}`);
   }
 }

@@ -44,7 +44,7 @@ export interface Heatpump {
   temperature: number;
   fan_speed: number;
   mode: heatpump_mode;
-  scheduled: boolean;
+  schedule_id: string | null;
 }
 export interface HeatpumpInput {
   id?: string;
@@ -53,14 +53,14 @@ export interface HeatpumpInput {
   temperature: number;
   fan_speed: number;
   mode: heatpump_mode;
-  scheduled?: boolean;
+  schedule_id?: string | null;
 }
 const heatpump = {
   tableName: 'heatpump',
-  columns: ['id', 'device_id', 'name', 'temperature', 'fan_speed', 'mode', 'scheduled'],
+  columns: ['id', 'device_id', 'name', 'temperature', 'fan_speed', 'mode', 'schedule_id'],
   requiredForInsert: ['device_id', 'temperature', 'fan_speed', 'mode'],
   primaryKey: 'id',
-  foreignKeys: {},
+  foreignKeys: { schedule_id: { table: 'schedule', column: 'id', $type: null as unknown as Schedule }, },
   $type: null as unknown as Heatpump,
   $input: null as unknown as HeatpumpInput
 } as const;
@@ -72,9 +72,9 @@ export interface Schedule {
   description: string;
   fan_speed: number;
   temperature: number;
-  start_time: string;
-  end_time: string;
-  weekdays: weekday[];
+  start_time: string | null;
+  end_time: string | null;
+  weekdays: weekday[] | null;
 }
 export interface ScheduleInput {
   id?: string;
@@ -82,14 +82,14 @@ export interface ScheduleInput {
   description?: string;
   fan_speed: number;
   temperature: number;
-  start_time: string;
-  end_time: string;
-  weekdays?: weekday[];
+  start_time?: string | null;
+  end_time?: string | null;
+  weekdays?: weekday[] | null;
 }
 const schedule = {
   tableName: 'schedule',
   columns: ['id', 'created_at', 'description', 'fan_speed', 'temperature', 'start_time', 'end_time', 'weekdays'],
-  requiredForInsert: ['fan_speed', 'temperature', 'start_time', 'end_time'],
+  requiredForInsert: ['fan_speed', 'temperature'],
   primaryKey: 'id',
   foreignKeys: {},
   $type: null as unknown as Schedule,

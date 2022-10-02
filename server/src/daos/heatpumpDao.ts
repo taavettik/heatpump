@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
-import { Heatpump, tables } from '../../schema';
 import { Db } from '../common/db';
+import { Heatpump, tables } from '../shared/schema';
 import { CamelCase } from '../shared/types';
 
 @Service()
@@ -20,9 +20,14 @@ export class HeatpumpDao {
     return db.one(
       `
       UPDATE ${this.table.tableName} SET
-        ${data.name !== undefined ? 'name = $[name],' : ''}
-        temperature = $[temperature],
-        fan_speed = $[fanSpeed]
+      ${[
+        data.name !== undefined ? 'name = $[name],' : '',
+        data.temperature !== undefined ? 'temperature = $[temperature]' : '',
+        data.fanSpeed !== undefined ? 'fan_speed = $[fanSpeed]' : '',
+        data.scheduleId !== undefined ? 'schedule_id = $[scheduleId]' : '',
+      ]
+        .filter(Boolean)
+        .join(',')}
       WHERE id = $[id]
       RETURNING *
     `,

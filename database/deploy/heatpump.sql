@@ -12,7 +12,7 @@ CREATE TABLE heatpump (
   temperature integer NOT NULL,
   fan_speed integer NOT NULL,
   mode heatpump_mode NOT NULL,
-  scheduled boolean NOT NULL DEFAULT false
+  schedule_id uuid REFERENCES schedule(id)
 );
 
 COMMIT;

@@ -36,7 +36,6 @@ export const heatpumpRouter: FastifyPluginCallback = async (fastify) => {
           temperature: { type: 'number' },
           fanSpeed: { type: 'number' },
         },
-        required: ['temperature', 'fanSpeed'],
       },
     },
   });

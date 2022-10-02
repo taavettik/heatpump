@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
-import { AppUser } from '../../schema';
 import { Db } from '../common/db';
+import { AppUser } from '../shared/schema';
 import { CamelCase } from '../shared/types';
 
 @Service()

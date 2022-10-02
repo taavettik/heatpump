@@ -5,9 +5,10 @@ import { FanIcon } from '../../common/constants/icons';
 interface Props {
   initialValue: number;
   onChange: (speed: number) => void;
+  onBlur?: () => void;
 }
 
-export function FanSlider({ initialValue, onChange }: Props) {
+export function FanSlider({ initialValue, onChange, onBlur }: Props) {
   return (
     <Stack align="center" axis="x">
       <FanIcon />

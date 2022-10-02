@@ -18,8 +18,8 @@ async function updateHeatpumpState({
   temperature,
   fanSpeed,
 }: {
-  temperature: number;
-  fanSpeed: number;
+  temperature?: number;
+  fanSpeed?: number;
 }) {
   const { data } = await base.patch<CamelCase<Heatpump>>(`/heatpump/state`, {
     temperature,

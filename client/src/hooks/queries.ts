@@ -6,5 +6,7 @@ export function useMeQuery() {
 }
 
 export function useHeatpumpQuery() {
-  return useQuery(['heatpump'], api.fetchHeatpump);
+  return useQuery(['heatpump'], api.fetchHeatpump, {
+    refetchOnWindowFocus: true,
+  });
 }
