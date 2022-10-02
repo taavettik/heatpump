@@ -8,6 +8,7 @@ const baseTheme = {
     primaryMuted3: '#124D7D',
     //warmMain: '#FF4000',
     warmMain: '#FF934F',
+    coolMain: '#56CBF9',
 
     text: 'white',
     muted1: '#eaeaea',

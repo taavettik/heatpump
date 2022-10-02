@@ -1,16 +1,25 @@
+import { FastifyRequest } from 'fastify';
 import Container, { Service } from 'typedi';
 import { Db } from '../common/db';
 import { HeatpumpDao } from '../daos/heatpumpDao';
 import { ScheduleDao } from '../daos/scheduleDao';
 import { Schedule } from '../shared/schema';
 import { CamelCase } from '../shared/types';
+import { AuthService } from './authService';
 
 @Service()
 export class ScheduleService {
   constructor(
+    private readonly authService = Container.get(AuthService),
     private readonly scheduleDao = Container.get(ScheduleDao),
     private readonly heatpumpDao = Container.get(HeatpumpDao),
   ) {}
+
+  async get(req: FastifyRequest, id: string) {
+    await this.authService.authorize(req);
+
+    return this.scheduleDao.get(req.tx, id);
+  }
 
   async applySchedule(
     tx: Db,
@@ -33,6 +42,8 @@ export class ScheduleService {
 
     const [currentSchedule] = await this.scheduleDao.getCurrent(tx);
     const defaultSchedule = await this.scheduleDao.getDefault(tx);
+
+    console.log(currentSchedule);
 
     const heatpump = await this.heatpumpDao.get(tx, 1);
 

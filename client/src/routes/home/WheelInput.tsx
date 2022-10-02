@@ -2,7 +2,7 @@ import { ComponentChildren } from 'preact';
 import { useEffect, useMemo, useReducer, useRef, useState } from 'preact/hooks';
 import { default as Draggable, DraggableCore } from 'react-draggable';
 import { Text } from '../../common/components/Text';
-import { styled, theme } from '../../common/constants/styled';
+import { Color, styled, theme } from '../../common/constants/styled';
 import { deg2rad, rad2deg } from '../../common/utils/math';
 import { generateArc } from '../../common/utils/svg';
 
@@ -34,7 +34,13 @@ function Background() {
   );
 }
 
-function Marker({ angle = 0 }: { angle?: number }) {
+function Marker({
+  angle = 0,
+  color = 'warmMain',
+}: {
+  angle?: number;
+  color?: Color;
+}) {
   const d = useMemo(
     () =>
       generateArc([120, 120], [100, 100], [deg2rad(135), deg2rad(angle)], 0),
@@ -56,7 +62,7 @@ function Marker({ angle = 0 }: { angle?: number }) {
       <path
         d={d}
         fill="none"
-        stroke={theme.colors.warmMain.value}
+        stroke={theme.colors[color].value}
         strokeWidth={20}
       ></path>
     </svg>
@@ -76,12 +82,19 @@ function getPosition(angle: number) {
 
 interface Props {
   startAngle?: number;
+  color?: Color;
   onChange?: (angle: number) => void;
   onBlur?: () => void;
-  header?: string | ((angle: number) => string);
+  header?: string | ((angle: number) => string) | ComponentChildren;
 }
 
-export function WheelInput({ startAngle, onChange, onBlur, header }: Props) {
+export function WheelInput({
+  startAngle,
+  onChange,
+  onBlur,
+  header,
+  color,
+}: Props) {
   const [angle, setAngle] = useState(startAngle || 0);
   const [tempAngle, setTempAngle] = useState(angle);
 
@@ -145,13 +158,17 @@ export function WheelInput({ startAngle, onChange, onBlur, header }: Props) {
         />
       </DraggableCore>
       <Blob style={{ left: blobPos.x, bottom: blobPos.y }} />
-      <Marker angle={tempAngle} />
+      <Marker angle={tempAngle} color={color} />
       <Background />
 
       <InnerContainer>
-        <Text style={{ fontWeight: 'normal' }} variant="title1">
-          {typeof header === 'function' ? header(tempAngle) : header}
-        </Text>
+        {typeof header === 'object' ? (
+          header
+        ) : (
+          <Text style={{ fontWeight: 'normal' }} variant="title1">
+            {typeof header === 'function' ? header(tempAngle) : header}
+          </Text>
+        )}
       </InnerContainer>
     </Container>
   );

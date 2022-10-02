@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { config } from './config';
-import { Heatpump } from '../shared/schema';
+import { Heatpump, Schedule } from '../shared/schema';
 import { CamelCase } from '../shared/types';
 
 const base = axios.create({
@@ -9,7 +9,9 @@ const base = axios.create({
 });
 
 async function fetchHeatpump() {
-  const { data } = await base.get<CamelCase<Heatpump>>(`/heatpump/`);
+  const { data } = await base.get<
+    CamelCase<Heatpump> & { schedule?: CamelCase<Schedule> }
+  >(`/heatpump/`);
 
   return data;
 }

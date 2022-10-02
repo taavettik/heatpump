@@ -7,6 +7,8 @@ import { Slider } from '../../common/components/Slider';
 import { Text } from '../../common/components/Text';
 import { useUpdateHeatpumpStateMutation } from '../../hooks/mutations';
 import { useHeatpumpQuery } from '../../hooks/queries';
+import { Heatpump, Schedule } from '../../shared/schema';
+import { CamelCase } from '../../shared/types';
 import { FanSlider } from './FanSlider';
 import { WheelInput } from './WheelInput';
 
@@ -20,6 +22,14 @@ function tempToAngle(temp: number) {
 
 function angleToTemp(angle: number) {
   return (angle / 270) * 20 + 10;
+}
+
+function isScheduleActive(
+  schedule: CamelCase<Schedule>,
+  temperature: number,
+  fanSpeed: number,
+) {
+  return fanSpeed === schedule.fanSpeed && temperature === schedule.temperature;
 }
 
 export function HomePage(props: Props) {
@@ -41,6 +51,9 @@ export function HomePage(props: Props) {
     return null;
   }
 
+  const scheduled =
+    data.schedule && isScheduleActive(data.schedule, temp, fanSpeed);
+
   return (
     <Page>
       <Spacing size="xlarge" />
@@ -50,9 +63,23 @@ export function HomePage(props: Props) {
       <Spacing size="normal" />
 
       <WheelInput
+        color={scheduled ? 'coolMain' : 'warmMain'}
         startAngle={tempToAngle(data.temperature)}
         onChange={(angle) => setTemp(Math.round(angleToTemp(angle)))}
-        header={`${temp} °C`}
+        header={
+          <Stack axis="y" align="center">
+            <Text style={{ fontWeight: 'normal' }} variant="title1">
+              {temp}°C
+            </Text>
+
+            <Text
+              style={{ fontWeight: 'normal', whiteSpace: 'pre' }}
+              variant="title2"
+            >
+              {scheduled ? '(scheduled)' : ' '}
+            </Text>
+          </Stack>
+        }
         onBlur={() =>
           updateState.mutate({
             temperature: temp,
