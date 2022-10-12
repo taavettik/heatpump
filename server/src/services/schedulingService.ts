@@ -30,7 +30,7 @@ interface Schedule {
 }
 
 const defaultCommand: Partial<AcCommand> = {
-  temperature: 20,
+  temperature: 22,
   fanSpeed: FanSpeed.FAN_SPEED_1,
 };
 
@@ -41,7 +41,7 @@ const schedules: Schedule[] = [
     to: parse('13:00', 'HH:mm', new Date()),
     weekdays: [...WORK_DAYS],
     command: {
-      temperature: 20,
+      temperature: 24,
       fanSpeed: FanSpeed.FAN_SPEED_5,
     },
   },
@@ -59,7 +59,7 @@ const schedules: Schedule[] = [
     to: parse('17:00', 'HH:mm', new Date()),
     weekdays: [...WORK_DAYS],
     command: {
-      temperature: 18,
+      temperature: 20,
       fanSpeed: FanSpeed.FAN_SPEED_5,
     },
   },
