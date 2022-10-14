@@ -8,12 +8,14 @@ RUN apk add python3 make g++ && \
   yarn install --frozen-lockfile
 
 COPY . .
+COPY ../shared/ ./
 
 RUN yarn build
 
 FROM nginx:stable-alpine
 
 WORKDIR /service
+
 COPY --from=builder /build/dist ./dist
 
 RUN ls
