@@ -152,7 +152,7 @@
   resolved "https://registry.yarnpkg.com/@node-rs/bcrypt-linux-arm64-musl/-/bcrypt-linux-arm64-musl-1.6.1.tgz#a78a2301f1329c0de768f9df1bc1a54090544e29"
   integrity sha512-z9tlsRjOViHSM5MWzDCz/I+itn7gNsXE22EPC89u7mAoJ691oT5GpnmEHf9SbmLWxNLW4gMb/JuF/1vCUUX3NQ==
 
-"@node-rs/bcrypt-linux-x64-gnu@1.6.1":
+"@node-rs/bcrypt-linux-x64-gnu@1.6.1", "@node-rs/bcrypt-linux-x64-gnu@^1.6.1":
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/@node-rs/bcrypt-linux-x64-gnu/-/bcrypt-linux-x64-gnu-1.6.1.tgz#7d543d399cd70dc4e113e3115ff07aa2be764d6b"
   integrity sha512-GwOFrzHN+Em+OhViA9hCmr/VGTVVl9OcASgG6ehT1PM7CB6zuhONBuvCUCoRyP03zY5ZkHbv8ODqAj9a9WGV2A==
