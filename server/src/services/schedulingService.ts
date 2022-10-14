@@ -41,7 +41,7 @@ const schedules: Schedule[] = [
     to: parse('13:00', 'HH:mm', new Date()),
     weekdays: [...WORK_DAYS],
     command: {
-      temperature: 24,
+      temperature: 22,
       fanSpeed: FanSpeed.FAN_SPEED_5,
     },
   },
@@ -50,7 +50,7 @@ const schedules: Schedule[] = [
     to: parse('02:00', 'HH:mm', new Date()),
     weekdays: [...ALL_DAYS],
     command: {
-      temperature: 24,
+      temperature: 22,
       fanSpeed: FanSpeed.FAN_SPEED_5,
     },
   },
