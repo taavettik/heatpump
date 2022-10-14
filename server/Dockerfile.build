@@ -4,7 +4,7 @@ WORKDIR /service
 COPY . .
 
 RUN apk add python3 make g++ && \
-  yarn install --frozen-lockfile && \
+  yarn install --frozen-lockfile --ignore-platform && \
   yarn run build
 
 CMD ["node", "./build/server.js"]

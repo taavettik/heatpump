@@ -13,6 +13,7 @@
     "@hapi/boom": "^10.0.0",
     "@node-rs/bcrypt": "^1.6.1",
     "@node-rs/bcrypt-linux-arm64-musl": "^1.6.1",
+    "@node-rs/bcrypt-linux-x64-gnu": "^1.6.1",
     "@types/cookie-parser": "^1.4.3",
     "@types/express": "^4.17.13",
     "@types/jsonwebtoken": "^8.5.9",
