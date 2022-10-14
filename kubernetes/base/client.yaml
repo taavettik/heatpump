@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  name: ${PROJECT_NAME}-client
+  labels:
+    app: ${PROJECT_NAME}-client
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+    name: ${PROJECT_NAME}-client
+  selector:
+    app: ${PROJECT_NAME}-client
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${PROJECT_NAME}-client
+  labels:
+    app: ${PROJECT_NAME}-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ${PROJECT_NAME}-client
+  template:
+    metadata:
+      labels:
+        app: ${PROJECT_NAME}-client
+    spec:
+      containers:
+      - name: ${PROJECT_NAME}-client
+        image: taavettik/${PROJECT_NAME}-client:${PROJECT_ENV}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080

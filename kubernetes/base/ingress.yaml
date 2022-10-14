@@ -20,6 +20,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: ${PROJECT_NAME}-backend
+            name: ${PROJECT_NAME}-client
             port:
-              number: 1234
+              number: 8080
