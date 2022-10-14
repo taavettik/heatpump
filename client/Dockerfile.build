@@ -1,0 +1,21 @@
+FROM --platform=amd64 node:lts-alpine AS builder
+
+WORKDIR /build
+
+COPY package.json yarn.lock ./
+
+RUN apk add python3 make g++ && \
+  yarn install --frozen-lockfile
+
+COPY . .
+
+RUN yarn build
+
+FROM nginx:stable-alpine
+
+WORKDIR /service
+COPY --from=builder /build/dist ./dist
+
+RUN ls
+
+COPY ./nginx.conf /etc/nginx/nginx.conf

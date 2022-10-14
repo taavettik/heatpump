@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "db:deploy": "docker compose exec db sqitch deploy",
+    "db": "docker compose exec db sqitch",
+    "db:connect": "docker compose exec db psql -U heatpump heatpump",
+    "db:init:dev": "docker compose exec db psql -U heatpump heatpump -f ./data/dev.sql"
+  }
+}

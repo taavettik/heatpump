@@ -1,33 +1,49 @@
-import express from 'express';
-import cookieParser from 'cookie-parser';
+import 'reflect-metadata';
 import './common/handlebars';
 import { iotRouter } from './routers/iotRouter';
 import './common/db';
-import { json, urlencoded } from 'body-parser';
-import { webRouter } from './routers/webRouter';
-import { SchedulingService } from './services/schedulingService';
-import { authMiddleware } from './middleware/authMiddleware';
-import { authRouter } from './routers/authRouter';
+import { LegacySchedulingService } from './services/legacySchedulingService';
 import { config } from './common/config';
+import { heatpumpRouter } from './routers/heatpumpRouter';
+import fastify from 'fastify';
+import { dbTxPlugin } from './plugins/dbTxPlugin';
+import { authPlugin } from './plugins/authPlugin';
+import { authRouter } from './routers/authRouter';
+import { camelCase } from './common/utils/formatters';
+import Container from 'typedi';
+import { ScheduleService } from './services/scheduleService';
+import { db } from './common/db';
 
-const schedulingService = new SchedulingService();
+const schedulingService = new LegacySchedulingService();
+const scheduleService = Container.get(ScheduleService);
 
-setInterval(() => {
-  schedulingService.run();
-}, 60000);
+setInterval(async () => {
+  await db.tx(async (tx) => {
+    await scheduleService.runScheduler(tx);
+  });
+}, 10000);
 
-schedulingService.run();
+db.tx(async (tx) => {
+  await scheduleService.runScheduler(tx);
+});
 
-const app = express();
+const app = fastify({
+  logger: true,
+});
 
-app.use(cookieParser());
-app.use(json());
-app.use(urlencoded());
+app.register(dbTxPlugin);
+app.register(authPlugin);
+app.register(authRouter);
+app.register(iotRouter, { prefix: '/iot' });
+app.register(heatpumpRouter, { prefix: '/heatpump' });
 
-app.use('/iot', iotRouter);
+async function setupServer() {
+  const addr = await app.listen({
+    port: config.PORT,
+    host: '0.0.0.0',
+  });
 
-app.use('/', authRouter);
+  console.log(`Server listening on ${addr}`);
+}
 
-app.use('/', webRouter);
-
-app.listen(config.PORT, () => console.log(`Listening on ${config.PORT}...`));
+setupServer();

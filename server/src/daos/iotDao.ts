@@ -1,4 +1,4 @@
-import { db } from '../common/db';
+import { jsonDb as db } from '../common/db';
 import { AcCommand, FanSpeed, Mode } from '../common/schema';
 
 export class IotDao {

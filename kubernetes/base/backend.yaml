@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: ${PROJECT_NAME}-backend
-        image: taavettik/heatpump-backend:${PROJECT_ENV}
+        image: taavettik/${PROJECT_NAME}-backend:${PROJECT_ENV}
         imagePullPolicy: Always
         env:
         - name: "PROJECT_ENV"
@@ -42,7 +42,12 @@ spec:
           valueFrom:
             secretKeyRef:
               name: ${PROJECT_NAME}-secrets
-              key: jwt-secret        
+              key: jwt-secret
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ${PROJECT_NAME}-secrets
+              key: db-password
         - name: ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
