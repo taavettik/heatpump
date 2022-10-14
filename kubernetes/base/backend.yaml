@@ -38,6 +38,12 @@ spec:
           value: ${PROJECT_ENV}
         - name: "PORT"
           value: "1234"
+        - name: "DB_HOST"
+          value: "95.217.8.74"
+        - name: "DB_DATABASE":
+          value: "${PROJECT_NAME}_${PROJECT_ENV}"
+        - name: "DB_USER":
+          value: "${PROJECT_NAME}_${PROJECT_ENV}"
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
