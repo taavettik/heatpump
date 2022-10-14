@@ -17,7 +17,7 @@ jobs:
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBERNETES_CONFIG }}
-      - run: 'cp -r shared ./client'
+      - run: 'cp -r shared ./client/src'
       - uses: azure/k8s-create-secret@v1
         with:
           namespace: 'heatpump-${{ env.PROJECT_ENV }}'
@@ -41,7 +41,7 @@ jobs:
         with:
           username: taavettik
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - run: 'cp -r shared ./server'
+      - run: 'cp -r shared ./server/src'
       - uses: docker/build-push-action@v2
         with:
           context: ./server
