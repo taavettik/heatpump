@@ -1,7 +1,6 @@
 FROM node:lts-alpine
 
 WORKDIR /service
-COPY ../shared/ ./
 COPY . .
 
 RUN apk add python3 make g++ && \

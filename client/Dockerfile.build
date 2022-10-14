@@ -8,7 +8,6 @@ RUN apk add python3 make g++ && \
   yarn install --frozen-lockfile
 
 COPY . .
-COPY ../shared/ ./
 
 RUN yarn build
 
