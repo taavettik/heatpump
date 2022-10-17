@@ -277,7 +277,7 @@ const char* ssid = "HUAWEI-B593-B6C7";
 const char* password = "mandoliinim1es";
 
 //Your Domain name with URL path or IP address with path
-String serverName = "https://ac.kukkonen.dev/iot";
+String serverName = "https://ac.kukkonen.dev/api/iot";
 
 void setupWifi() {
   WiFi.begin(ssid, password);

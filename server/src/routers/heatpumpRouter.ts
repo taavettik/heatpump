@@ -23,14 +23,16 @@ export const heatpumpRouter: FastifyPluginCallback = async (fastify) => {
     handler: async (req, res) => {
       const hp = await heatpumpService.get(req, 1);
 
-      const { temperature, fanSpeed } = req.body as {
+      const { temperature, fanSpeed, power } = req.body as {
         temperature: number;
         fanSpeed: number;
+        power: boolean;
       };
 
       const updated = await heatpumpService.updateState(req, hp.id, {
         temperature,
         fanSpeed,
+        power,
       });
 
       res.send(updated);
@@ -41,6 +43,7 @@ export const heatpumpRouter: FastifyPluginCallback = async (fastify) => {
         properties: {
           temperature: { type: 'number' },
           fanSpeed: { type: 'number' },
+          power: { type: 'boolean' },
         },
       },
     },

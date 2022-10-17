@@ -5,6 +5,8 @@ import { Spacing, Stack } from '../../common/components/Layout';
 import { Page } from '../../common/components/Page';
 import { Slider } from '../../common/components/Slider';
 import { Text } from '../../common/components/Text';
+import { Toggle } from '../../common/components/Toggle';
+import { styled } from '../../common/constants/styled';
 import { useUpdateHeatpumpStateMutation } from '../../hooks/mutations';
 import { useHeatpumpQuery } from '../../hooks/queries';
 import { Heatpump, Schedule } from '../../shared/schema';
@@ -38,6 +40,7 @@ export function HomePage(props: Props) {
 
   const [temp, setTemp] = useState(data?.temperature ?? 20);
   const [fanSpeed, setFanSpeed] = useState(data?.fanSpeed ?? 0);
+  const [on, setOn] = useState(data?.power ?? true);
 
   useEffect(() => {
     if (!data) {
@@ -45,6 +48,7 @@ export function HomePage(props: Props) {
     }
     setTemp(data.temperature);
     setFanSpeed(data.fanSpeed);
+    setOn(data.power);
   }, [data]);
 
   if (!data) {
@@ -63,22 +67,26 @@ export function HomePage(props: Props) {
       <Spacing size="normal" />
 
       <WheelInput
-        color={scheduled ? 'coolMain' : 'warmMain'}
+        color={on ? (scheduled ? 'coolMain' : 'warmMain') : 'error'}
         startAngle={tempToAngle(data.temperature)}
         onChange={(angle) => setTemp(Math.round(angleToTemp(angle)))}
         header={
-          <Stack axis="y" align="center">
-            <Text style={{ fontWeight: 'normal' }} variant="title1">
-              {temp}°C
-            </Text>
+          on ? (
+            <Stack axis="y" align="center">
+              <Text style={{ fontWeight: 'normal' }} variant="title1">
+                {temp}°C
+              </Text>
 
-            <Text
-              style={{ fontWeight: 'normal', whiteSpace: 'pre' }}
-              variant="title2"
-            >
-              {scheduled ? '(scheduled)' : ' '}
-            </Text>
-          </Stack>
+              <Text
+                style={{ fontWeight: 'normal', whiteSpace: 'pre' }}
+                variant="title2"
+              >
+                {scheduled ? '(scheduled)' : ' '}
+              </Text>
+            </Stack>
+          ) : (
+            'OFF'
+          )
         }
         onBlur={() =>
           updateState.mutate({
@@ -96,6 +104,24 @@ export function HomePage(props: Props) {
           });
         }}
       />
+
+      <Spacing size="normal" />
+
+      <Stack axis="x" align="center" spacing="small">
+        <Toggle
+          state={on}
+          onChange={(target) => {
+            setOn(target);
+            updateState.mutate({
+              power: target,
+            });
+          }}
+        />
+
+        <Stack width="130px">
+          <Text variant="title3">{on ? 'Power ON' : 'Power OFF'}</Text>
+        </Stack>
+      </Stack>
     </Page>
   );
 }

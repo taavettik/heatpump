@@ -45,6 +45,7 @@ export interface Heatpump {
   fan_speed: number;
   mode: heatpump_mode;
   schedule_id: string | null;
+  power: boolean;
 }
 export interface HeatpumpInput {
   id?: string;
@@ -54,10 +55,11 @@ export interface HeatpumpInput {
   fan_speed: number;
   mode: heatpump_mode;
   schedule_id?: string | null;
+  power?: boolean;
 }
 const heatpump = {
   tableName: 'heatpump',
-  columns: ['id', 'device_id', 'name', 'temperature', 'fan_speed', 'mode', 'schedule_id'],
+  columns: ['id', 'device_id', 'name', 'temperature', 'fan_speed', 'mode', 'schedule_id', 'power'],
   requiredForInsert: ['device_id', 'temperature', 'fan_speed', 'mode'],
   primaryKey: 'id',
   foreignKeys: { schedule_id: { table: 'schedule', column: 'id', $type: null as unknown as Schedule }, },

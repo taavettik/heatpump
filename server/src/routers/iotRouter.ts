@@ -12,7 +12,7 @@ export const iotRouter: FastifyPluginAsync = async (fastify) => {
     const heatpump = await heatpumpDao.get(req.tx, 1);
 
     res.send({
-      on: true,
+      on: heatpump.power,
       mode: heatpump.mode === 'heat' ? 0 : 1,
       temperature: heatpump.temperature,
       fanSpeed: heatpump.fanSpeed,

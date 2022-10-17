@@ -1,15 +1,14 @@
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { api } from '../common/api';
+import { MutationOpts } from '../common/utils/types';
 
-type Opts = Omit<UseMutationOptions<any, any, any, any>, 'mutationFn'>;
-
-export function useLoginMutation(opts: Opts = {}) {
+export function useLoginMutation(opts: MutationOpts = {}) {
   return useMutation(api.login, {
     ...opts,
   });
 }
 
-export function useUpdateHeatpumpStateMutation(opts: Opts = {}) {
+export function useUpdateHeatpumpStateMutation(opts: MutationOpts = {}) {
   return useMutation(api.updateHeatpumpState, {
     ...opts,
   });

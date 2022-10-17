@@ -22,7 +22,7 @@ export class HeatpumpService {
   async updateState(
     req: FastifyRequest,
     id: string,
-    state: { temperature: number; fanSpeed: number },
+    state: { temperature: number; fanSpeed: number; power: boolean },
   ) {
     await this.authService.authorize(req);
 

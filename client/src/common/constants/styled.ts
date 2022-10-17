@@ -10,9 +10,13 @@ const baseTheme = {
     warmMain: '#FF934F',
     coolMain: '#56CBF9',
 
+    success: '#4CB963',
+    error: '#FB3640',
+
     text: 'white',
     muted1: '#eaeaea',
     muted2: '#D8D8D8',
+    muted3: '#C2C2C2',
   },
   space: {
     xxxsmall: '4px',

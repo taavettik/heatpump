@@ -25,6 +25,7 @@ export class HeatpumpDao {
         data.temperature !== undefined ? 'temperature = $[temperature]' : '',
         data.fanSpeed !== undefined ? 'fan_speed = $[fanSpeed]' : '',
         data.scheduleId !== undefined ? 'schedule_id = $[scheduleId]' : '',
+        data.power !== undefined ? 'power = $[power]' : '',
       ]
         .filter(Boolean)
         .join(',')}

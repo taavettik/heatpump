@@ -12,13 +12,19 @@ function ProtectedRoute({
   path: string;
   children: ComponentChildren;
 }) {
-  const { error, data, isLoading } = useMeQuery();
+  const { error, data, isLoading } = useMeQuery({
+    retry: false,
+  });
 
   useEffect(() => {
     if (!isLoading && error) {
       route('/login');
     }
   }, [error, isLoading]);
+
+  if (!data) {
+    return null;
+  }
 
   return <>{children}</>;
 }

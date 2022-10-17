@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../common/api';
+import { QueryOpts } from '../common/utils/types';
 
-export function useMeQuery() {
-  return useQuery(['me'], api.me);
+export function useMeQuery(opts: QueryOpts) {
+  return useQuery(['me'], api.me, opts);
 }
 
 export function useHeatpumpQuery() {
