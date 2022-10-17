@@ -86,8 +86,8 @@ jobs:
       - run: >
           . kubernetes/project.sh;
           kubectl kustomize "kubernetes/overlays/${PROJECT_ENV}" |envsubst |kubectl apply -f -;
-          kubectl rollout restart deployment
-          heatpump-backend
+          kubectl rollout restart deployment heatpump-backend
+          kubectl rollout restart deployment heatpump-client
           -n "heatpump-${{ env.PROJECT_ENV }}"
 
   db-deploy:
