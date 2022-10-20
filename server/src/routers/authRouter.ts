@@ -21,7 +21,9 @@ export const authRouter: FastifyPluginCallback = async (fastify) => {
     }
 
     const token = await userService.login(req, username, password);
-    res.cookie(config.JWT_COOKIE, token);
+    res.cookie(config.JWT_COOKIE, token, {
+      maxAge: 60 * 60 * 24 * 7 /* expires in a week */,
+    });
     res.send({ token });
   });
 
