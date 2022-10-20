@@ -13,6 +13,7 @@ import { camelCase } from './common/utils/formatters';
 import Container from 'typedi';
 import { ScheduleService } from './services/scheduleService';
 import { db } from './common/db';
+import { scheduleRouter } from './routers/scheduleRouter';
 
 const schedulingService = new LegacySchedulingService();
 const scheduleService = Container.get(ScheduleService);
@@ -36,6 +37,7 @@ app.register(authPlugin);
 app.register(authRouter);
 app.register(iotRouter, { prefix: '/iot' });
 app.register(heatpumpRouter, { prefix: '/heatpump' });
+app.register(scheduleRouter, { prefix: '/schedules' });
 
 async function setupServer() {
   const addr = await app.listen({

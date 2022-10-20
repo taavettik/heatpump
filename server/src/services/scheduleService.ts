@@ -21,6 +21,14 @@ export class ScheduleService {
     return this.scheduleDao.get(req.tx, id);
   }
 
+  async getAll(req: FastifyRequest) {
+    await this.authService.authorize(req);
+
+    const schedules = await this.scheduleDao.getAll(req.tx);
+
+    return schedules.map((s) => this.format(s));
+  }
+
   async applySchedule(
     tx: Db,
     heatpumpId: string,
@@ -62,5 +70,13 @@ export class ScheduleService {
 
   private log(...params: any[]) {
     console.log(`[${new Date().toISOString()}] [Scheduler]`, ...params);
+  }
+
+  private format(schedule: CamelCase<Schedule>) {
+    return {
+      ...schedule,
+      weekdays:
+        (schedule as any).weekdays?.match(/{(.*?)}/)?.[1].split(',') ?? null,
+    };
   }
 }

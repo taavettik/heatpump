@@ -43,6 +43,12 @@ async function login(params: { username: string; password: string }) {
   return data;
 }
 
+async function fetchSchedules() {
+  const { data } = await base.get<CamelCase<Schedule>[]>('/schedules');
+
+  return data;
+}
+
 async function me() {
   const { data } = await base.get(`/me`);
 
@@ -51,6 +57,7 @@ async function me() {
 
 export const api = {
   fetchHeatpump,
+  fetchSchedules,
   updateHeatpumpState,
   login,
   me,

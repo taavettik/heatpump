@@ -9,9 +9,9 @@ export function BottomTabs() {
     <TabContainer>
       <InnerContainer>
         <Stack axis="x" justify="center" spacing="normal">
-          <Tab icon={HomeIcon} label="Home" />
+          <Tab icon={HomeIcon} link="/" label="Home" />
 
-          <Tab icon={CalendarIcon} label="Schedules" active />
+          <Tab icon={CalendarIcon} link="/schedules" label="Schedules" />
         </Stack>
       </InnerContainer>
     </TabContainer>
@@ -21,15 +21,19 @@ export function BottomTabs() {
 interface TabProps {
   icon: IconType;
   label: string;
-  active?: boolean;
   iconSize?: number;
+  link: string;
 }
 
-function Tab({ icon: Icon, label, active, iconSize = 32 }: TabProps) {
-  const color = active ? 'muted2' : 'text';
+function Tab({ icon: Icon, link, label, iconSize = 32 }: TabProps) {
+  const path = window.location.pathname;
+
+  const active = path === link;
+
+  const color = active ? 'muted1' : 'muted3';
 
   return (
-    <TabLink href="/">
+    <TabLink href={link}>
       <Icon color={`var(--colors-${color})`} size={iconSize} />
 
       <Spacing axis="y" size="xxxsmall" />
