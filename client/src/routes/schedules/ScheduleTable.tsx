@@ -25,7 +25,7 @@ export function ScheduleTable() {
 
       <TableContainer>
         {range(23).map((hour) => (
-          <HourTick css={{ top: (600 / 24) * hour }} />
+          <HourTick css={{ top: (tableHeight / 24) * hour }} />
         ))}
 
         {schedules.data?.map((schedule) => (
@@ -52,7 +52,7 @@ function Schedule({ schedule }: { schedule: CamelCase<Schedule> }) {
   if (
     !schedule.startTime ||
     !schedule.endTime ||
-    !schedule.weekdays?.some((d) => d === weekday)
+    (schedule.weekdays && !schedule.weekdays?.some((d) => d === weekday))
   ) {
     return null;
   }
