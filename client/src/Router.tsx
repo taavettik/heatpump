@@ -4,6 +4,7 @@ import { useEffect } from 'preact/hooks';
 import { useMeQuery } from './hooks/queries';
 import { HomePage } from './routes/home';
 import { LoginPage } from './routes/login';
+import { SchedulesPage } from './routes/schedules';
 
 function ProtectedRoute({
   path,
@@ -36,6 +37,10 @@ export function Router() {
 
       <ProtectedRoute path="/">
         <HomePage />
+      </ProtectedRoute>
+
+      <ProtectedRoute path="/schedules">
+        <SchedulesPage />
       </ProtectedRoute>
     </BrowserRouter>
   );
