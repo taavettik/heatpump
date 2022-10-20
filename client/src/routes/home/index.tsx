@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { DateTime } from 'luxon';
 import { useEffect, useState } from 'preact/hooks';
 import { api } from '../../common/api';
 import { Spacing, Stack } from '../../common/components/Layout';
@@ -24,6 +25,10 @@ function tempToAngle(temp: number) {
 
 function angleToTemp(angle: number) {
   return (angle / 270) * 20 + 10;
+}
+
+function formatTime(time: string) {
+  return DateTime.fromFormat(time, 'HH:mm:ss').toFormat('HH:mm');
 }
 
 function isScheduleActive(
@@ -122,6 +127,19 @@ export function HomePage(props: Props) {
           <Text variant="title3">{on ? 'Power ON' : 'Power OFF'}</Text>
         </Stack>
       </Stack>
+
+      <Spacing size="normal" />
+
+      {data.schedule && data.schedule.startTime && data.schedule.endTime && (
+        <>
+          <Text variant="title3">Currently scheduled</Text>
+
+          <Text variant="title3">
+            {formatTime(data.schedule.startTime)} -{' '}
+            {formatTime(data.schedule.endTime)}
+          </Text>
+        </>
+      )}
     </Page>
   );
 }
