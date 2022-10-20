@@ -2,6 +2,10 @@ import { createStitches } from '@stitches/react';
 
 const baseTheme = {
   colors: {
+    primaryBright4: '#A6D0F2',
+    primaryBright3: '#70B4EB',
+    primaryBright2: '#4CA1E6',
+    primaryBright1: '#298EE0',
     primaryMain: '#1C77C3',
     primaryMuted1: '#196EB3',
     primaryMuted2: '#1763A1',
@@ -14,6 +18,8 @@ const baseTheme = {
     error: '#FB3640',
 
     text: 'white',
+    textSecondary: 'black',
+    background: 'white',
     muted1: '#eaeaea',
     muted2: '#D8D8D8',
     muted3: '#C2C2C2',

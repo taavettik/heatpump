@@ -8,6 +8,7 @@ import { Slider } from '../../common/components/Slider';
 import { Text } from '../../common/components/Text';
 import { Toggle } from '../../common/components/Toggle';
 import { styled } from '../../common/constants/styled';
+import { formatTime } from '../../common/utils/time';
 import { useUpdateHeatpumpStateMutation } from '../../hooks/mutations';
 import { useHeatpumpQuery } from '../../hooks/queries';
 import { Heatpump, Schedule } from '../../shared/schema';
@@ -25,10 +26,6 @@ function tempToAngle(temp: number) {
 
 function angleToTemp(angle: number) {
   return (angle / 270) * 20 + 10;
-}
-
-function formatTime(time: string) {
-  return DateTime.fromFormat(time, 'HH:mm:ss').toFormat('HH:mm');
 }
 
 function isScheduleActive(
