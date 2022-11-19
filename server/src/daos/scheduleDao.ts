@@ -16,7 +16,7 @@ const weekDays: weekday[] = [
 @Service()
 export class ScheduleDao {
   get(tx: Db, id: string) {
-    return tx.any<CamelCase<Schedule>>(
+    return tx.oneOrNone<CamelCase<Schedule>>(
       `SELECT * FROM schedule WHERE id = $[id]`,
       {
         id,

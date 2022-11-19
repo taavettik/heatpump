@@ -10,9 +10,16 @@ interface StackProps {
   align?: CSSProperties['alignItems'];
   justify?: CSSProperties['justifyContent'];
   width?: CSSProperties['width'];
+  style?: CSSProperties;
 }
 
-export function Stack({ axis, spacing, children, ...styles }: StackProps) {
+export function Stack({
+  axis,
+  spacing,
+  children,
+  style: styleProp,
+  ...styles
+}: StackProps) {
   const style: CSSProperties = {
     flexDirection: axis === 'x' ? 'row' : 'column',
     alignItems: styles.align,
@@ -32,6 +39,7 @@ export function Stack({ axis, spacing, children, ...styles }: StackProps) {
         '& > *': {
           [marginKey]: spacing ? `$${spacing}` : '0',
         },
+        ...styleProp,
       }}
     >
       {children}

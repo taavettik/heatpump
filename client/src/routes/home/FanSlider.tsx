@@ -16,10 +16,12 @@ export function FanSlider({ initialValue, onChange, onBlur }: Props) {
       <Spacing size="normal" axis="x" />
 
       <Slider
-        value={initialValue === 4 ? 100 : initialValue * 20}
+        value={initialValue * 20 + 10}
         onChange={(val) => {
           // speed on scale 0.. 4
           const speed = Math.min(Math.floor(val / 20), 4);
+
+          console.log(val);
 
           onChange(speed);
         }}

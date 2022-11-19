@@ -1,17 +1,19 @@
-import { ComponentChildren } from 'preact';
+import { Component, ComponentChildren, ComponentType } from 'preact';
 import BrowserRouter, { route } from 'preact-router';
 import { useEffect } from 'preact/hooks';
 import { useMeQuery } from './hooks/queries';
 import { HomePage } from './routes/home';
 import { LoginPage } from './routes/login';
+import { SchedulePage } from './routes/schedule';
 import { SchedulesPage } from './routes/schedules';
 
 function ProtectedRoute({
   path,
-  children,
+  component: Component,
+  ...props
 }: {
   path: string;
-  children: ComponentChildren;
+  component: ComponentType<any>;
 }) {
   const { error, data, isLoading } = useMeQuery({
     retry: false,
@@ -27,7 +29,7 @@ function ProtectedRoute({
     return null;
   }
 
-  return <>{children}</>;
+  return <Component {...props} />;
 }
 
 export function Router() {
@@ -35,13 +37,11 @@ export function Router() {
     <BrowserRouter>
       <LoginPage path="/login" />
 
-      <ProtectedRoute path="/">
-        <HomePage />
-      </ProtectedRoute>
+      <ProtectedRoute path="/" component={HomePage} />
 
-      <ProtectedRoute path="/schedules">
-        <SchedulesPage />
-      </ProtectedRoute>
+      <ProtectedRoute path="/schedules" component={SchedulesPage} />
+
+      <ProtectedRoute path="/schedules/:id" component={SchedulePage} />
     </BrowserRouter>
   );
 }

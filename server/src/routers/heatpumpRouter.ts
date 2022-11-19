@@ -12,9 +12,9 @@ export const heatpumpRouter: FastifyPluginCallback = async (fastify) => {
   fastify.get('/', async (req, res) => {
     const heatpump = await heatpumpService.get(req, 1);
 
-    const [currentSchedule] = heatpump.scheduleId
+    const currentSchedule = heatpump.scheduleId
       ? await scheduleService.get(req, heatpump.scheduleId)
-      : [];
+      : undefined;
 
     res.send({ ...heatpump, schedule: currentSchedule });
   });

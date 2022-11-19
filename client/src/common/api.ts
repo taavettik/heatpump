@@ -49,6 +49,12 @@ async function fetchSchedules() {
   return data;
 }
 
+async function fetchSchedule(id: string) {
+  const { data } = await base.get<CamelCase<Schedule>>(`/schedules/${id}`);
+
+  return data;
+}
+
 async function me() {
   const { data } = await base.get(`/me`);
 
@@ -58,6 +64,7 @@ async function me() {
 export const api = {
   fetchHeatpump,
   fetchSchedules,
+  fetchSchedule,
   updateHeatpumpState,
   login,
   me,

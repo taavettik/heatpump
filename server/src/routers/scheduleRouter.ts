@@ -10,4 +10,12 @@ export const scheduleRouter: FastifyPluginCallback = async (fastify) => {
 
     res.send(schedules);
   });
+
+  fastify.get(`/:id`, async (req, res) => {
+    const { id } = req.params as { id: string };
+
+    const schedule = await scheduleService.get(req, id);
+
+    res.send(schedule);
+  });
 };

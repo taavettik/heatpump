@@ -10,12 +10,16 @@ type Typography = {
   element: keyof JSX.IntrinsicElements;
 } & CSSProperties;
 
-type TypographyVariant = 'body' | 'title1' | 'title2' | 'title3';
+type TypographyVariant = 'body' | 'title1' | 'title2' | 'title3' | 'label';
 
 const typographies: Record<TypographyVariant, Typography> = {
   body: {
     element: 'span',
     fontSize: '16px',
+  },
+  label: {
+    element: 'label',
+    fontSize: '22px',
   },
   title1: {
     element: 'h1',
