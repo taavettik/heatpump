@@ -55,6 +55,18 @@ async function fetchSchedule(id: string) {
   return data;
 }
 
+async function updateSchedule({
+  id,
+  ...body
+}: Partial<CamelCase<Schedule>> & { id: string }) {
+  const { data } = await base.patch<CamelCase<Schedule>>(
+    `/schedules/${id}`,
+    body,
+  );
+
+  return data;
+}
+
 async function me() {
   const { data } = await base.get(`/me`);
 
@@ -65,6 +77,7 @@ export const api = {
   fetchHeatpump,
   fetchSchedules,
   fetchSchedule,
+  updateSchedule,
   updateHeatpumpState,
   login,
   me,

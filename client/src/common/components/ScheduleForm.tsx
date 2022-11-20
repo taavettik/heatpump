@@ -1,28 +1,63 @@
+import { DateTime } from 'luxon';
 import { ComponentProps } from 'preact';
 import { Controller, useForm } from 'react-hook-form';
 import { FanSlider } from '../../routes/home/FanSlider';
+import { weekday } from '../../shared/schema';
 import { styled } from '../constants/styled';
 import { Input } from './Input';
 import { Spacing, Stack } from './Layout';
 import { Text } from './Text';
+import { WeekdaySelector } from './WeekdaySelector';
 
 interface ScheduleData {
   temperature: number;
   fanSpeed: number;
   startTime: Date | null;
   endTime: Date | null;
+  weekDays: weekday[] | null;
 }
+
+type ScheduleFormData = Omit<ScheduleData, 'startTime' | 'endTime'> & {
+  startTime: string | null;
+  endTime: string | null;
+};
 
 export function ScheduleForm({
   defaultValues,
+  onCancel,
+  onSubmit,
 }: {
   defaultValues?: ScheduleData;
+  onCancel?: () => void;
+  onSubmit?: (data: ScheduleData) => void;
 }) {
-  const form = useForm<ScheduleData>({ defaultValues });
+  const form = useForm<ScheduleFormData>({
+    defaultValues: {
+      ...defaultValues,
+      startTime: defaultValues?.startTime
+        ? DateTime.fromJSDate(defaultValues?.startTime).toFormat('HH:mm')
+        : null,
+      endTime: defaultValues?.endTime
+        ? DateTime.fromJSDate(defaultValues?.endTime).toFormat('HH:mm')
+        : null,
+    },
+  });
 
   return (
     <Stack axis="y">
-      <Content>
+      <Content
+        onSubmit={form.handleSubmit((data) => {
+          onSubmit?.({
+            ...data,
+            startTime: data.startTime
+              ? DateTime.fromFormat(data.startTime, 'HH:mm').toJSDate()
+              : null,
+            endTime: data.endTime
+              ? DateTime.fromFormat(data.endTime, 'HH:mm').toJSDate()
+              : null,
+          });
+        })}
+      >
         <Field area="temperature" axis="y" spacing="xxsmall">
           <Text variant="body" style={{ fontSize: 22 }}>
             Temperature
@@ -61,25 +96,42 @@ export function ScheduleForm({
         </Field>
 
         <Field area="startTime">
-          <Stack axis="y" spacing="xxsmall">
-            <Text variant="label">From</Text>
-
-            <Input
-              css={{ width: 150 }}
-              {...form.register('startTime')}
-              type="time"
-            />
-          </Stack>
+          <Input
+            label="From"
+            css={{ width: 150 }}
+            {...form.register('startTime')}
+            type="time"
+          />
         </Field>
         <Field area="endTime">
-          <Stack axis="y" spacing="xxsmall">
-            <Text variant="label">To</Text>
+          <Input
+            label="To"
+            css={{ width: 150 }}
+            {...form.register('endTime')}
+            type="time"
+          />
+        </Field>
 
-            <Input
-              css={{ width: 150 }}
-              {...form.register('startTime')}
-              type="time"
-            />
+        <Field area="weekdays">
+          <Text variant="label">On</Text>
+
+          <Controller
+            name="weekDays"
+            control={form.control}
+            render={({ field: { value, onChange } }) => (
+              <WeekdaySelector
+                value={value ?? undefined}
+                onChange={(val) => onChange(val)}
+              />
+            )}
+          ></Controller>
+        </Field>
+
+        <Field area="buttons">
+          <Stack axis="x" justify="space-between">
+            <button onClick={() => onCancel?.()}>Cancel</button>
+
+            <button type="submit">Save</button>
           </Stack>
         </Field>
       </Content>
@@ -97,9 +149,10 @@ const Field = ({
   </Stack>
 );
 
-const Content = styled('div', {
+const Content = styled('form', {
   display: 'grid',
-  gridTemplateAreas: '"temperature fanSpeed" "startTime endTime"',
+  gridTemplateAreas:
+    '"temperature fanSpeed" "startTime endTime" "weekdays weekdays" "buttons buttons"',
   gridTemplateColumns: '200px 1fr',
   gridTemplateRows: '1fr',
   gap: '$small',

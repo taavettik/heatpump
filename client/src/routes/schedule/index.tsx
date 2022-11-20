@@ -1,15 +1,25 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { route } from 'preact-router';
+import { DateTime } from 'luxon';
 import { api } from '../../common/api';
 import { Spacing } from '../../common/components/Layout';
 import { Page } from '../../common/components/Page';
 import { ScheduleForm } from '../../common/components/ScheduleForm';
 import { Text } from '../../common/components/Text';
 import { parseTime } from '../../common/utils/time';
+import { useUpdateScheduleMutation } from '../../hooks/mutations';
 
 export function SchedulePage({ id }: { id: string }) {
   const schedule = useQuery(['schedule', id], () => api.fetchSchedule(id));
 
-  console.log(schedule.data);
+  const queryClient = useQueryClient();
+
+  const updateSchedule = useUpdateScheduleMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['schedule', id] });
+      route('/schedules');
+    },
+  });
 
   return (
     <Page>
@@ -30,7 +40,22 @@ export function SchedulePage({ id }: { id: string }) {
             endTime: schedule.data.endTime
               ? parseTime(schedule.data.endTime).toJSDate()
               : null,
+            weekDays: schedule.data.weekdays,
           }}
+          onSubmit={(data) =>
+            updateSchedule.mutateAsync({
+              id: schedule.data.id,
+              temperature: data.temperature,
+              fanSpeed: data.fanSpeed,
+              startTime: data.startTime
+                ? DateTime.fromJSDate(data.startTime).toFormat('HH:mm:ss')
+                : null,
+              endTime: data.endTime
+                ? DateTime.fromJSDate(data.endTime).toFormat('HH:mm:ss')
+                : null,
+              weekdays: data.weekDays,
+            })
+          }
         />
       ) : null}
     </Page>

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { DateTime } from 'luxon';
+import { route } from 'preact-router';
 import { api } from '../../common/api';
 import { Spacing, Stack } from '../../common/components/Layout';
 import { Text } from '../../common/components/Text';
@@ -29,7 +30,15 @@ export function ScheduleTable() {
         ))}
 
         {schedules.data?.map((schedule) => (
-          <Schedule key={schedule.id} schedule={schedule} />
+          <Schedule
+            onClick={() => {
+              console.log('onclick');
+
+              route(`/schedules/${schedule.id}`);
+            }}
+            key={schedule.id}
+            schedule={schedule}
+          />
         ))}
 
         <CurrentMarker
@@ -44,7 +53,13 @@ export function ScheduleTable() {
   );
 }
 
-function Schedule({ schedule }: { schedule: CamelCase<Schedule> }) {
+function Schedule({
+  schedule,
+  onClick,
+}: {
+  schedule: CamelCase<Schedule>;
+  onClick?: () => void;
+}) {
   const currentHours = useCurrentHours();
   const date = useCurrentTime();
   const weekday = getWeekday(date);
@@ -84,6 +99,7 @@ function Schedule({ schedule }: { schedule: CamelCase<Schedule> }) {
       <>
         <ScheduleContainer
           data-active={active}
+          onClick={onClick}
           css={{
             top: pixelsPerHour * startHours + 1,
             height: (24 - startHours) * pixelsPerHour - 1,
@@ -94,6 +110,7 @@ function Schedule({ schedule }: { schedule: CamelCase<Schedule> }) {
 
         <ScheduleContainer
           data-active={active}
+          onClick={onClick}
           css={{
             top: 0,
             height: pixelsPerHour * endHours,
@@ -107,6 +124,7 @@ function Schedule({ schedule }: { schedule: CamelCase<Schedule> }) {
 
   return (
     <ScheduleContainer
+      onClick={onClick}
       data-active={active}
       css={{
         top: pixelsPerHour * startHours + 1,
@@ -128,7 +146,8 @@ const TableContainer = styled('div', {
   overflow: 'hidden',
 });
 
-const ScheduleContainer = styled('div', {
+const ScheduleContainer = styled('button', {
+  cursor: 'pointer',
   width: '100%',
   position: 'absolute',
   backgroundColor: '$primaryBright3',

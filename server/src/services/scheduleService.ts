@@ -18,7 +18,13 @@ export class ScheduleService {
   async get(req: FastifyRequest, id: string) {
     await this.authService.authorize(req);
 
-    return this.scheduleDao.get(req.tx, id);
+    const schedule = await this.scheduleDao.get(req.tx, id);
+
+    if (!schedule) {
+      return null;
+    }
+
+    return this.format(schedule);
   }
 
   async getAll(req: FastifyRequest) {
@@ -27,6 +33,18 @@ export class ScheduleService {
     const schedules = await this.scheduleDao.getAll(req.tx);
 
     return schedules.map((s) => this.format(s));
+  }
+
+  async update(
+    req: FastifyRequest,
+    id: string,
+    data: Partial<CamelCase<Schedule>>,
+  ) {
+    await this.authService.authorize(req);
+
+    const updated = await this.scheduleDao.update(req.tx, id, data);
+
+    return this.format(updated);
   }
 
   async applySchedule(

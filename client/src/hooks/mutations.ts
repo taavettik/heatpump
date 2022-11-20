@@ -13,3 +13,9 @@ export function useUpdateHeatpumpStateMutation(opts: MutationOpts = {}) {
     ...opts,
   });
 }
+
+export function useUpdateScheduleMutation(opts: MutationOpts = {}) {
+  return useMutation(api.updateSchedule, {
+    ...opts,
+  });
+}

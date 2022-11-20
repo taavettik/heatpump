@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 import { Db } from '../common/db';
-import { Schedule, weekday } from '../shared/schema';
+import { Schedule, tables, weekday } from '../shared/schema';
 import { CamelCase } from '../shared/types';
 
 const weekDays: weekday[] = [
@@ -15,6 +15,8 @@ const weekDays: weekday[] = [
 
 @Service()
 export class ScheduleDao {
+  private readonly table = tables.schedule;
+
   get(tx: Db, id: string) {
     return tx.oneOrNone<CamelCase<Schedule>>(
       `SELECT * FROM schedule WHERE id = $[id]`,
@@ -54,5 +56,28 @@ export class ScheduleDao {
     return tx.oneOrNone<CamelCase<Schedule>>(`
       SELECT * FROM schedule WHERE start_time IS NULL AND end_time IS NULL ORDER BY created_at DESC LIMIT 1;
     `);
+  }
+
+  update(tx: Db, id: string, data: Partial<CamelCase<Schedule>>) {
+    return tx.one(
+      `
+      UPDATE ${this.table.tableName} SET
+      ${[
+        data.temperature !== undefined ? 'temperature = $[temperature]' : '',
+        data.fanSpeed !== undefined ? 'fan_speed = $[fanSpeed]' : '',
+        data.startTime !== undefined ? 'start_time = $[startTime]' : '',
+        data.endTime !== undefined ? 'end_time = $[endTime]' : '',
+        data.weekdays !== undefined ? 'weekdays = $[weekdays]::weekday[]' : '',
+      ]
+        .filter(Boolean)
+        .join(',')}
+      WHERE id = $[id]
+      RETURNING *
+    `,
+      {
+        id,
+        ...data,
+      },
+    );
   }
 }
