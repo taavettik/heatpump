@@ -73,12 +73,14 @@ function Schedule({
   const startTime = parseTime(schedule.startTime).toLocal();
   const endTime = parseTime(schedule.endTime).toLocal();
 
-  const duration = endTime.diff(startTime, 'hours').hours;
   const pixelsPerHour = tableHeight / 24;
 
   // this should be done in terms of minutes
   const startHours = startTime.hour + startTime.minute / 60;
   const endHours = endTime.hour + endTime.minute / 60;
+
+  const duration = endHours - startHours;
+
   const active =
     duration < 0
       ? currentHours >= startHours || currentHours <= endHours
