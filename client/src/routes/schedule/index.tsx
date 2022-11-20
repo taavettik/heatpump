@@ -48,10 +48,12 @@ export function SchedulePage({ id }: { id: string }) {
               temperature: data.temperature,
               fanSpeed: data.fanSpeed,
               startTime: data.startTime
-                ? DateTime.fromJSDate(data.startTime).toFormat('HH:mm:ss')
+                ? DateTime.fromJSDate(data.startTime)
+                    .toUTC()
+                    .toFormat('HH:mm:ss')
                 : null,
               endTime: data.endTime
-                ? DateTime.fromJSDate(data.endTime).toFormat('HH:mm:ss')
+                ? DateTime.fromJSDate(data.endTime).toUTC().toFormat('HH:mm:ss')
                 : null,
               weekdays: data.weekDays,
             })

@@ -2,6 +2,7 @@ import { Service } from 'typedi';
 import { Db } from '../common/db';
 import { Schedule, tables, weekday } from '../shared/schema';
 import { CamelCase } from '../shared/types';
+import { DateTime } from 'luxon';
 
 const weekDays: weekday[] = [
   'sunday',
@@ -12,6 +13,9 @@ const weekDays: weekday[] = [
   'friday',
   'saturday',
 ];
+
+// hardcoded for now
+const TIMEZONE = 'europe/helsinki';
 
 @Service()
 export class ScheduleDao {
@@ -30,26 +34,31 @@ export class ScheduleDao {
     return tx.any<CamelCase<Schedule>>(`SELECT * FROM schedule`);
   }
 
-  getCurrent(tx: Db) {
-    const dayOfWeek = new Date().getUTCDay();
-    const day = weekDays[dayOfWeek];
+  async getCurrent(tx: Db) {
+    const day = DateTime.now()
+      .setZone(TIMEZONE)
+      .weekdayLong.toLocaleLowerCase();
 
-    return tx.any<CamelCase<Schedule>>(
+    const schedules = await tx.any<CamelCase<Schedule>>(
       `SELECT * FROM schedule WHERE
         (
           -- schedules spanning the midnight, e.g. 22:00 - 3:00 am
           CASE WHEN end_time < start_time THEN
             (
-              (start_time <= current_time AND current_time <= '23:59:59'::time) OR
-              (current_time >= '00:00'::time AND current_time <= end_time)
+              (start_time <= current_time AT TIME ZONE $[timezone] AND current_time AT TIME ZONE $[timezone] <= '23:59:59'::time) OR
+              (current_time AT TIME ZONE $[timezone] >= '00:00'::time AND current_time AT TIME ZONE $[timezone] <= end_time)
             )
-          ELSE start_time <= current_time AND current_time < end_time 
+          ELSE
+            (start_time <= (current_time AT TIME ZONE $[timezone]) AND (current_time AT TIME ZONE $[timezone]) < end_time )
           END
         ) AND ($[day] = ANY(weekdays) OR weekdays IS NULL)`,
       {
         day,
+        timezone: TIMEZONE,
       },
     );
+
+    return schedules;
   }
 
   getDefault(tx: Db) {

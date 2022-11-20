@@ -69,7 +69,7 @@ export class ScheduleService {
     const [currentSchedule] = await this.scheduleDao.getCurrent(tx);
     const defaultSchedule = await this.scheduleDao.getDefault(tx);
 
-    console.log(currentSchedule);
+    console.log('Current schedule', currentSchedule);
 
     const heatpump = await this.heatpumpDao.get(tx, 1);
 

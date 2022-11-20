@@ -32,8 +32,6 @@ export function ScheduleTable() {
         {schedules.data?.map((schedule) => (
           <Schedule
             onClick={() => {
-              console.log('onclick');
-
               route(`/schedules/${schedule.id}`);
             }}
             key={schedule.id}
@@ -72,8 +70,8 @@ function Schedule({
     return null;
   }
 
-  const startTime = parseTime(schedule.startTime);
-  const endTime = parseTime(schedule.endTime);
+  const startTime = parseTime(schedule.startTime).toLocal();
+  const endTime = parseTime(schedule.endTime).toLocal();
 
   const duration = endTime.diff(startTime, 'hours').hours;
   const pixelsPerHour = tableHeight / 24;

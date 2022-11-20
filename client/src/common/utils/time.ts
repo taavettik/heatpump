@@ -2,11 +2,15 @@ import { DateTime } from 'luxon';
 import { weekday } from '../../shared/schema';
 
 export function formatTime(time: string) {
-  return DateTime.fromFormat(time, 'HH:mm:ss').toFormat('HH:mm');
+  return DateTime.fromFormat(time, 'HH:mm:ss', { zone: 'utc' })
+    .toLocal()
+    .toFormat('HH:mm');
 }
 
 export function parseTime(time: string) {
-  return DateTime.fromFormat(time, 'HH:mm:ss');
+  return DateTime.fromFormat(time, 'HH:mm:ss', {
+    zone: 'utc',
+  });
 }
 
 const weekdays: weekday[] = [
