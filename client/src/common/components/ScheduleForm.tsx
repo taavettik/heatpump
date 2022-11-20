@@ -4,6 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { FanSlider } from '../../routes/home/FanSlider';
 import { weekday } from '../../shared/schema';
 import { styled } from '../constants/styled';
+import { Button } from './Button';
 import { Input } from './Input';
 import { Spacing, Stack } from './Layout';
 import { Text } from './Text';
@@ -129,9 +130,9 @@ export function ScheduleForm({
 
         <Field area="buttons">
           <Stack axis="x" justify="space-between">
-            <button onClick={() => onCancel?.()}>Cancel</button>
+            <Button onClick={() => onCancel?.()}>Cancel</Button>
 
-            <button type="submit">Save</button>
+            <Button type="submit">Save</Button>
           </Stack>
         </Field>
       </Content>
@@ -157,7 +158,8 @@ const Content = styled('form', {
   gridTemplateRows: '1fr',
   gap: '$small',
   '@media(max-width: 600px)': {
-    gridTemplateAreas: '"temperature" "fanSpeed"',
+    gridTemplateAreas:
+      '"temperature" "fanSpeed" "startTime" "endTime" "weekdays" "buttons"',
     gridTemplateColumns: '1fr',
     gridTemplateRows: '1fr 1fr',
     gap: '$small',
