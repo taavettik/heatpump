@@ -45,16 +45,15 @@ export class ScheduleDao {
           -- schedules spanning the midnight, e.g. 22:00 - 3:00 am
           CASE WHEN end_time < start_time THEN
             (
-              (start_time <= current_time AT TIME ZONE $[timezone] AND current_time AT TIME ZONE $[timezone] <= '23:59:59'::time) OR
-              (current_time AT TIME ZONE $[timezone] >= '00:00'::time AND current_time AT TIME ZONE $[timezone] <= end_time)
+              (start_time <= (current_time AT TIME ZONE 'utc')::time AND (current_time AT TIME ZONE 'utc')::time <= '23:59:59'::time) OR
+              ((current_time AT TIME ZONE 'utc')::time >= '00:00'::time AND (current_time AT TIME ZONE 'utc')::time <= end_time)
             )
           ELSE
-            (start_time <= (current_time AT TIME ZONE $[timezone]) AND (current_time AT TIME ZONE $[timezone]) < end_time )
+            (start_time <= (current_time AT TIME ZONE 'utc')::time AND (current_time AT TIME ZONE 'utc')::time < end_time )
           END
         ) AND ($[day] = ANY(weekdays) OR weekdays IS NULL)`,
       {
         day,
-        timezone: TIMEZONE,
       },
     );
 
