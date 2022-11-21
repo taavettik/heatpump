@@ -25,6 +25,8 @@ export function WeekdaySelector({ value, onChange }: Props) {
   const onToggle = (val: weekday, target: boolean) => {
     const current = value ?? weekdays.slice();
 
+    console.log(val, target, current);
+
     if (target) {
       onChange?.([...new Set([...current, val])]);
 
@@ -60,7 +62,7 @@ export function WeekdaySelector({ value, onChange }: Props) {
             <Input
               type="checkbox"
               checked={value?.includes(day) || !value}
-              onChange={(e: any) => onToggle(day, e.target.value)}
+              onChange={(e: any) => onToggle(day, e.target.checked)}
               key={day}
               id={day}
             />{' '}

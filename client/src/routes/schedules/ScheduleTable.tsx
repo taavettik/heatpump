@@ -1,9 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { DateTime } from 'luxon';
 import { route } from 'preact-router';
+import { useMemo, useState } from 'preact/hooks';
 import { api } from '../../common/api';
 import { Spacing, Stack } from '../../common/components/Layout';
 import { Text } from '../../common/components/Text';
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from '../../common/constants/icons';
 import { styled } from '../../common/constants/styled';
 import { range } from '../../common/utils/fn';
 import { formatTime, getWeekday, parseTime } from '../../common/utils/time';
@@ -16,11 +21,49 @@ const tableHeight = 500;
 export function ScheduleTable() {
   const schedules = useQuery(['schedules'], api.fetchSchedules);
 
+  const [offsetDays, setOffsetDays] = useState(0);
+
+  const now = useCurrentTime();
   const currentHours = useCurrentHours();
 
+  const selected = useMemo(
+    () => DateTime.fromJSDate(now).plus({ days: offsetDays }),
+    [now.getTime(), offsetDays],
+  );
+
   return (
-    <Stack axis="y">
-      <Text variant="title2">Today</Text>
+    <Stack axis="y" align="center">
+      <Stack axis="x" align="center" spacing="xxsmall" justify="space-between">
+        <CursorButton
+          disabled={offsetDays <= -6}
+          onClick={() => setOffsetDays((days) => days - 1)}
+        >
+          <ChevronLeftIcon size={24} />
+        </CursorButton>
+
+        <Stack
+          width="250px"
+          justify="center"
+          axis="x"
+          align="center"
+          spacing="xxsmall"
+        >
+          <Text variant="title2">{selected.setLocale('en').weekdayLong}</Text>
+
+          <Text variant="title3">
+            {offsetDays === -1 && '(Yesterday)'}
+            {offsetDays === 0 && '(Today)'}
+            {offsetDays === 1 && '(Tomorrow)'}
+          </Text>
+        </Stack>
+
+        <CursorButton
+          disabled={offsetDays >= 6}
+          onClick={() => setOffsetDays((days) => days + 1)}
+        >
+          <ChevronRightIcon size={24} />
+        </CursorButton>
+      </Stack>
 
       <Spacing axis="y" size="small" />
 
@@ -36,6 +79,7 @@ export function ScheduleTable() {
             }}
             key={schedule.id}
             schedule={schedule}
+            date={selected.toJSDate()}
           />
         ))}
 
@@ -54,12 +98,14 @@ export function ScheduleTable() {
 function Schedule({
   schedule,
   onClick,
+  date,
 }: {
   schedule: CamelCase<Schedule>;
   onClick?: () => void;
+  date: Date;
 }) {
   const currentHours = useCurrentHours();
-  const date = useCurrentTime();
+  const currentDate = useCurrentTime();
   const weekday = getWeekday(date);
 
   if (
@@ -77,12 +123,12 @@ function Schedule({
 
   // this should be done in terms of minutes
   const startHours = startTime.hour + startTime.minute / 60;
-  const endHours = endTime.hour + endTime.minute / 60;
+  const endHours = endTime.hour + endTime.minute / 60 || 24;
 
   const duration = endHours - startHours;
 
   const active =
-    duration < 0
+    currentDate.getDay() === date.getDate() && duration < 0
       ? currentHours >= startHours || currentHours <= endHours
       : currentHours >= startHours && currentHours <= endHours;
 
@@ -177,4 +223,28 @@ const CurrentMarker = styled('div', {
   justifyContent: 'center',
   display: 'flex',
   paddingBottom: '4px',
+});
+
+const CursorButton = styled('button', {
+  border: 'none',
+  background: 'none',
+  color: 'white',
+  cursor: 'pointer',
+  width: 40,
+  height: 40,
+  borderRadius: 20,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  '&:focus': {
+    outline: 'none',
+  },
+  '&:hover': {
+    backgroundColor: '#ffffff22',
+  },
+  '&:disabled': {
+    background: 'none !important',
+    cursor: 'initial',
+    color: '$muted2',
+  },
 });

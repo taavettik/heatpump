@@ -6,8 +6,6 @@ import { ScheduleTable } from './ScheduleTable';
 export function SchedulesPage() {
   return (
     <Page>
-      <Spacing size="xlarge" />
-
       <Text variant="title1">Schedules</Text>
 
       <Spacing size="normal" />
