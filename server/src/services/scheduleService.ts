@@ -4,7 +4,7 @@ import { Db } from '../common/db';
 import { HeatpumpDao } from '../daos/heatpumpDao';
 import { ScheduleDao } from '../daos/scheduleDao';
 import { Schedule } from '../shared/schema';
-import { CamelCase } from '../shared/types';
+import { CamelCase, CreateSchedulePayload } from '../shared/types';
 import { AuthService } from './authService';
 
 @Service()
@@ -45,6 +45,14 @@ export class ScheduleService {
     const updated = await this.scheduleDao.update(req.tx, id, data);
 
     return this.format(updated);
+  }
+
+  async create(req: FastifyRequest, data: CreateSchedulePayload) {
+    await this.authService.authorize(req);
+
+    const schedule = await this.scheduleDao.create(req.tx, data);
+
+    return this.format(schedule);
   }
 
   async applySchedule(

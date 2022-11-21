@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 import { Db } from '../common/db';
 import { Schedule, tables, weekday } from '../shared/schema';
-import { CamelCase } from '../shared/types';
+import { CamelCase, CreateSchedulePayload } from '../shared/types';
 import { DateTime } from 'luxon';
 
 const weekDays: weekday[] = [
@@ -84,6 +84,21 @@ export class ScheduleDao {
     `,
       {
         id,
+        ...data,
+      },
+    );
+  }
+
+  create(tx: Db, data: CreateSchedulePayload) {
+    console.log(data);
+
+    return tx.one(
+      `
+      INSERT INTO ${this.table.tableName} (fan_speed, temperature, start_time, end_time, weekdays, description) VALUES
+      ($[fanSpeed], $[temperature], $[startTime], $[endTime], $[weekdays], coalesce($[description], ''))
+      RETURNING *
+    `,
+      {
         ...data,
       },
     );

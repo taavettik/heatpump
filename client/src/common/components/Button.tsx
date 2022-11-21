@@ -23,6 +23,11 @@ const BaseButton = styled('button', {
   '&:hover': {
     backgroundColor: '$muted1',
   },
+  '&:disabled': {
+    backgroundColor: '$background',
+    cursor: 'initial',
+    opacity: 0.8,
+  },
 
   '&:focus': {
     boxShadow: '0 0 1px 1px black',

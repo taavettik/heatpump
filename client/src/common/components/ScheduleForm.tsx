@@ -28,12 +28,14 @@ export function ScheduleForm({
   onCancel,
   onSubmit,
 }: {
-  defaultValues?: ScheduleData;
+  defaultValues?: Partial<ScheduleData>;
   onCancel?: () => void;
   onSubmit?: (data: ScheduleData) => void;
 }) {
   const form = useForm<ScheduleFormData>({
     defaultValues: {
+      fanSpeed: 0,
+      weekDays: null,
       ...defaultValues,
       startTime: defaultValues?.startTime
         ? DateTime.fromJSDate(defaultValues?.startTime).toFormat('HH:mm')
@@ -42,7 +44,10 @@ export function ScheduleForm({
         ? DateTime.fromJSDate(defaultValues?.endTime).toFormat('HH:mm')
         : null,
     },
+    mode: 'onBlur',
   });
+
+  console.log(form.formState.errors, form.formState.isValid);
 
   return (
     <Stack axis="y">
@@ -67,7 +72,7 @@ export function ScheduleForm({
           <Stack axis="x" align="center" spacing="xxsmall">
             <Input
               css={{ width: 60 }}
-              {...form.register('temperature')}
+              {...form.register('temperature', { required: true })}
               type="number"
             />
 
@@ -100,7 +105,7 @@ export function ScheduleForm({
           <Input
             label="From"
             css={{ width: 150 }}
-            {...form.register('startTime')}
+            {...form.register('startTime', { required: true })}
             type="time"
           />
         </Field>
@@ -108,7 +113,7 @@ export function ScheduleForm({
           <Input
             label="To"
             css={{ width: 150 }}
-            {...form.register('endTime')}
+            {...form.register('endTime', { required: true })}
             type="time"
           />
         </Field>
@@ -130,9 +135,18 @@ export function ScheduleForm({
 
         <Field area="buttons">
           <Stack axis="x" justify="space-between">
-            <Button onClick={() => onCancel?.()}>Cancel</Button>
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                onCancel?.();
+              }}
+            >
+              Cancel
+            </Button>
 
-            <Button type="submit">Save</Button>
+            <Button disabled={!form.formState.isValid} type="submit">
+              Save
+            </Button>
           </Stack>
         </Field>
       </Content>

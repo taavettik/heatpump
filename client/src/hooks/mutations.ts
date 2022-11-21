@@ -19,3 +19,9 @@ export function useUpdateScheduleMutation(opts: MutationOpts = {}) {
     ...opts,
   });
 }
+
+export function useCreateScheduleMutation(opts: MutationOpts = {}) {
+  return useMutation(api.createSchedule, {
+    ...opts,
+  });
+}

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { config } from './config';
 import { Heatpump, Schedule } from '../shared/schema';
-import { CamelCase } from '../shared/types';
+import { CamelCase, CreateSchedulePayload } from '../shared/types';
 
 const base = axios.create({
   baseURL: config.API_URL,
@@ -67,6 +67,14 @@ async function updateSchedule({
   return data;
 }
 
+async function createSchedule(payload: CreateSchedulePayload) {
+  const { data } = await base.post<CamelCase<Schedule>>(`/schedules`, {
+    ...payload,
+  });
+
+  return data;
+}
+
 async function me() {
   const { data } = await base.get(`/me`);
 
@@ -78,6 +86,7 @@ export const api = {
   fetchSchedules,
   fetchSchedule,
   updateSchedule,
+  createSchedule,
   updateHeatpumpState,
   login,
   me,

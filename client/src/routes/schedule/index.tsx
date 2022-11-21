@@ -42,6 +42,7 @@ export function SchedulePage({ id }: { id: string }) {
               : null,
             weekDays: schedule.data.weekdays,
           }}
+          onCancel={() => history.go(-1)}
           onSubmit={(data) =>
             updateSchedule.mutateAsync({
               id: schedule.data.id,

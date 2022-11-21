@@ -26,4 +26,10 @@ export const scheduleRouter: FastifyPluginCallback = async (fastify) => {
 
     res.send(schedule);
   });
+
+  fastify.post('/', async (req, res) => {
+    const schedule = await scheduleService.create(req, req.body as any);
+
+    res.send(schedule);
+  });
 };

@@ -69,7 +69,20 @@ export function ScheduleTable() {
 
       <TableContainer>
         {range(23).map((hour) => (
-          <HourTick css={{ top: (tableHeight / 24) * hour }} />
+          <HourTick
+            onClick={() =>
+              route(
+                `/schedules/new?startTime=${DateTime.fromJSDate(now)
+                  .set({ hour: hour - 1, minute: 0, second: 0, millisecond: 0 })
+                  .toUTC()
+                  .toISO()}`,
+              )
+            }
+            css={{
+              top: (tableHeight / 24) * (hour - 1),
+              height: tableHeight / 24,
+            }}
+          />
         ))}
 
         {schedules.data?.map((schedule) => (
@@ -83,13 +96,15 @@ export function ScheduleTable() {
           />
         ))}
 
-        <CurrentMarker
-          css={{ bottom: (tableHeight / 24) * (24 - currentHours) }}
-        >
-          <Text variant="body" style={{ fontSize: 20, color: 'black' }}>
-            {DateTime.now().toFormat('HH:mm')}
-          </Text>
-        </CurrentMarker>
+        {offsetDays === 0 && (
+          <CurrentMarker
+            css={{ bottom: (tableHeight / 24) * (24 - currentHours) }}
+          >
+            <Text variant="body" style={{ fontSize: 20, color: 'black' }}>
+              {DateTime.now().toFormat('HH:mm')}
+            </Text>
+          </CurrentMarker>
+        )}
       </TableContainer>
     </Stack>
   );
@@ -209,11 +224,13 @@ const ScheduleContainer = styled('button', {
   },
 });
 
-const HourTick = styled('div', {
+const HourTick = styled('button', {
   position: 'absolute',
   width: '100%',
-  backgroundColor: '$muted1',
-  height: 1,
+  borderBottom: '1px solid $muted1',
+  background: 'none',
+  cursor: 'pointer',
+  borderWidth: '0 0 1px 0',
 });
 
 const CurrentMarker = styled('div', {
@@ -223,6 +240,7 @@ const CurrentMarker = styled('div', {
   justifyContent: 'center',
   display: 'flex',
   paddingBottom: '4px',
+  pointerEvents: 'none',
 });
 
 const CursorButton = styled('button', {
