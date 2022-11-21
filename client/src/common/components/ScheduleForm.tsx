@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { ComponentProps } from 'preact';
+import { ComponentProps, JSX } from 'preact';
 import { Controller, useForm } from 'react-hook-form';
 import { FanSlider } from '../../routes/home/FanSlider';
 import { weekday } from '../../shared/schema';
@@ -27,10 +27,12 @@ export function ScheduleForm({
   defaultValues,
   onCancel,
   onSubmit,
+  actions,
 }: {
   defaultValues?: Partial<ScheduleData>;
   onCancel?: () => void;
   onSubmit?: (data: ScheduleData) => void;
+  actions?: JSX.Element;
 }) {
   const form = useForm<ScheduleFormData>({
     defaultValues: {
@@ -133,10 +135,12 @@ export function ScheduleForm({
           ></Controller>
         </Field>
 
+        <Field area="actions">{actions}</Field>
+
         <Field area="buttons">
           <Stack axis="x" justify="space-between">
             <Button
-              onClick={(e) => {
+              onClick={(e: any) => {
                 e.preventDefault();
                 onCancel?.();
               }}
@@ -167,13 +171,13 @@ const Field = ({
 const Content = styled('form', {
   display: 'grid',
   gridTemplateAreas:
-    '"temperature fanSpeed" "startTime endTime" "weekdays weekdays" "buttons buttons"',
+    '"temperature fanSpeed" "startTime endTime" "weekdays weekdays" "actions actions" "buttons buttons"',
   gridTemplateColumns: '200px 1fr',
   gridTemplateRows: '1fr',
   gap: '$small',
   '@media(max-width: 600px)': {
     gridTemplateAreas:
-      '"temperature" "fanSpeed" "startTime" "endTime" "weekdays" "buttons"',
+      '"temperature" "fanSpeed" "startTime" "endTime" "weekdays" "actions" "buttons"',
     gridTemplateColumns: '1fr',
     gridTemplateRows: '1fr 1fr',
     gap: '$small',

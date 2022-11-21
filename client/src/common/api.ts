@@ -75,6 +75,10 @@ async function createSchedule(payload: CreateSchedulePayload) {
   return data;
 }
 
+async function deleteSchedule(id: string) {
+  await base.delete(`/schedules/${id}`);
+}
+
 async function me() {
   const { data } = await base.get(`/me`);
 
@@ -87,6 +91,7 @@ export const api = {
   fetchSchedule,
   updateSchedule,
   createSchedule,
+  deleteSchedule,
   updateHeatpumpState,
   login,
   me,

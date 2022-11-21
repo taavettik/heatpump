@@ -1,13 +1,25 @@
-import { ComponentChildren } from 'preact';
+import { ComponentChildren, ComponentProps } from 'preact';
 import { HTMLAttributes } from 'preact/compat';
+import { IconType } from 'react-icons';
 import { styled } from '../constants/styled';
+import { Spacing } from './Layout';
 
-type Props = HTMLAttributes<HTMLButtonElement> & {
+type Props = ComponentProps<typeof BaseButton> & {
   children?: ComponentChildren;
+  icon?: IconType;
 };
 
-export function Button({ children, ...props }: Props) {
-  return <BaseButton {...props}>{children}</BaseButton>;
+export function Button({ children, icon: Icon, ...props }: Props) {
+  return (
+    <BaseButton {...props}>
+      {Icon ? (
+        <>
+          <Icon /> <Spacing axis="x" size="small" />
+        </>
+      ) : null}
+      {children}
+    </BaseButton>
+  );
 }
 
 const BaseButton = styled('button', {
@@ -19,6 +31,9 @@ const BaseButton = styled('button', {
   outline: 'none !important',
   padding: '$xxsmall',
   cursor: 'pointer',
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'center',
 
   '&:hover': {
     backgroundColor: '$muted1',
@@ -31,5 +46,17 @@ const BaseButton = styled('button', {
 
   '&:focus': {
     boxShadow: '0 0 1px 1px black',
+  },
+
+  variants: {
+    color: {
+      error: {
+        border: '3px solid $errorMuted1',
+        color: '$errorMuted1',
+        '&:hover': {
+          backgroundColor: '$errorHighlighted',
+        },
+      },
+    },
   },
 });

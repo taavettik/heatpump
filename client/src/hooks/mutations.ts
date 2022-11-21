@@ -25,3 +25,9 @@ export function useCreateScheduleMutation(opts: MutationOpts = {}) {
     ...opts,
   });
 }
+
+export function useDeleteScheduleMutation(opts: MutationOpts = {}) {
+  return useMutation(api.deleteSchedule, {
+    ...opts,
+  });
+}

@@ -47,6 +47,12 @@ export class ScheduleService {
     return this.format(updated);
   }
 
+  async delete(req: FastifyRequest, id: string) {
+    await this.authService.authorize(req);
+
+    return this.scheduleDao.delete(req.tx, id);
+  }
+
   async create(req: FastifyRequest, data: CreateSchedulePayload) {
     await this.authService.authorize(req);
 

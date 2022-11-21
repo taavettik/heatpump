@@ -15,7 +15,10 @@ const baseTheme = {
     coolMain: '#56CBF9',
 
     success: '#4CB963',
+    errorHighlighted: '#FED7D9',
     error: '#FB3640',
+    errorMuted1: '#DC040F',
+    errorMuted2: '#B4040C',
 
     text: 'white',
     textSecondary: 'black',

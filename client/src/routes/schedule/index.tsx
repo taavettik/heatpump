@@ -7,7 +7,12 @@ import { Page } from '../../common/components/Page';
 import { ScheduleForm } from '../../common/components/ScheduleForm';
 import { Text } from '../../common/components/Text';
 import { parseTime } from '../../common/utils/time';
-import { useUpdateScheduleMutation } from '../../hooks/mutations';
+import {
+  useDeleteScheduleMutation,
+  useUpdateScheduleMutation,
+} from '../../hooks/mutations';
+import { Button } from '../../common/components/Button';
+import { DeleteIcon } from '../../common/constants/icons';
 
 export function SchedulePage({ id }: { id: string }) {
   const schedule = useQuery(['schedule', id], () => api.fetchSchedule(id));
@@ -21,16 +26,42 @@ export function SchedulePage({ id }: { id: string }) {
     },
   });
 
+  const deleteSchedule = useDeleteScheduleMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['schedule', id] });
+      queryClient.invalidateQueries({ queryKey: ['schedules'] });
+      route('/schedules');
+    },
+  });
+
   return (
     <Page>
-      <Spacing size="xlarge" />
-
       <Text variant="title1">Edit schedule</Text>
 
       <Spacing size="normal" />
 
       {schedule.data ? (
         <ScheduleForm
+          actions={
+            <Button
+              onClick={(e: any) => {
+                e.preventDefault();
+                const confirmed = confirm(
+                  'Are you sure you want to delete this schedule?',
+                );
+
+                if (!confirmed) {
+                  return;
+                }
+
+                deleteSchedule.mutate(id);
+              }}
+              icon={DeleteIcon}
+              color="error"
+            >
+              Delete
+            </Button>
+          }
           defaultValues={{
             temperature: schedule.data.temperature,
             fanSpeed: schedule.data.fanSpeed,

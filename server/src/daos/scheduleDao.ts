@@ -90,8 +90,6 @@ export class ScheduleDao {
   }
 
   create(tx: Db, data: CreateSchedulePayload) {
-    console.log(data);
-
     return tx.one(
       `
       INSERT INTO ${this.table.tableName} (fan_speed, temperature, start_time, end_time, weekdays, description) VALUES
@@ -102,5 +100,11 @@ export class ScheduleDao {
         ...data,
       },
     );
+  }
+
+  delete(tx: Db, id: string) {
+    return tx.none(`DELETE FROM ${this.table.tableName} WHERE id = $[id]`, {
+      id,
+    });
   }
 }

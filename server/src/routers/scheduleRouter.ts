@@ -32,4 +32,12 @@ export const scheduleRouter: FastifyPluginCallback = async (fastify) => {
 
     res.send(schedule);
   });
+
+  fastify.delete('/:id', async (req, res) => {
+    const { id } = req.params as { id: string };
+
+    await scheduleService.delete(req, id);
+
+    res.send('OK');
+  });
 };
